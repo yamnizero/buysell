@@ -1,3 +1,4 @@
+import 'package:buysell/screen/authentication/phoneauth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -16,7 +17,11 @@ class AuthUi extends StatelessWidget {
                 style:ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.white)
                 ),
-                onPressed: (){}, child: Row(
+                onPressed: ()
+                {
+                  Navigator.pushNamed(context, PhoneAuthScreen.id);
+                },
+                child: Row(
               children: [
                 Icon(Icons.phone_android,color: Colors.black,),
                 SizedBox(width: 8,),

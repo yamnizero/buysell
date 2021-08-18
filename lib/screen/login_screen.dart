@@ -2,6 +2,7 @@ import 'package:buysell/Widgets/auth_ui.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
+  static const String id = "login-screen";
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class LoginScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-                "If you continue, you are accepting\nTerms and Condition and Privacy Policy",
+                "If you continue, you are accepting\nTerms and Condition and Privacy Policy.",
               textAlign: TextAlign.center,style: TextStyle(color: Colors.white,fontSize: 10),
             ),
           )
