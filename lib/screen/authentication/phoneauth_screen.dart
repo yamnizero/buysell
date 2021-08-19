@@ -1,3 +1,4 @@
+import 'package:buysell/services/phoneauth_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,12 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
 
   var countryCodeController = TextEditingController(text: "+249");
   var phoneNumberController = TextEditingController();
+
+  @override
+  void dispose() {
+    showAlertDialog(context);
+    super.dispose();
+  }
 
 
   @override
@@ -115,7 +122,8 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                 String number = '${countryCodeController.text}${phoneNumberController.text}';
 
                 showAlertDialog(context);
-                phoneAuthentication(number);
+
+                _services.verifyPhoneNumber(context, number);
               },
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -132,9 +140,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   }
 
 
-  phoneAuthentication(number){
-    print(number);
-  }
+
 
   //alert dialog
  showAlertDialog(BuildContext context){
@@ -155,5 +161,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
       return alert;
     });
  }
+
+  PhoneAuthServices _services = PhoneAuthServices();
 
 }
