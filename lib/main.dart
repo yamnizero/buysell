@@ -15,37 +15,54 @@ void main() async{
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return  FutureBuilder(
-      future: Init.instance.initialize(),
-      builder: (context, AsyncSnapshot snapshot) {
-        // Show splash screen while waiting for app resources to load:
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                primaryColor: Colors.cyan,
-              ),
-              home: SplashScreen());
-        } else {
-          // Loading is done, return the app:
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              primaryColor: Colors.cyan.shade900,
-            ),
-            home: LoginScreen(),
-            //initial route is not working with our current UI
-            routes: {
-              //we will add the screen here for easy navigation
-              LoginScreen.id :(context) => LoginScreen(),
-              PhoneAuthScreen.id:(context) => PhoneAuthScreen(),
-              LocationScreen.id:(context) => LocationScreen(),
-            },
-          );
-        }
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+                  primaryColor: Colors.cyan.shade900,
+                 ),
+      initialRoute: SplashScreen.id,
+      routes: {
+        //we will add the screen here for easy navigation
+                  SplashScreen.id :(context) => SplashScreen(),
+                  LoginScreen.id :(context) => LoginScreen(),
+                  PhoneAuthScreen.id:(context) => PhoneAuthScreen(),
+                  LocationScreen.id:(context) => LocationScreen(),
       },
+
     );
+
+    // return  FutureBuilder(
+    //   future: Init.instance.initialize(),
+    //   builder: (context, AsyncSnapshot snapshot) {
+    //     // Show splash screen while waiting for app resources to load:
+    //     if (snapshot.connectionState == ConnectionState.waiting) {
+    //       return MaterialApp(
+    //           debugShowCheckedModeBanner: false,
+    //           theme: ThemeData(
+    //             primaryColor: Colors.cyan,
+    //           ),
+    //           home: SplashScreen());
+    //     } else {
+    //       // Loading is done, return the app:
+    //       return MaterialApp(
+    //         debugShowCheckedModeBanner: false,
+    //         title: 'Flutter Demo',
+    //         theme: ThemeData(
+    //           primaryColor: Colors.cyan.shade900,
+    //         ),
+    //         home: LoginScreen(),
+    //         //initial route is not working with our current UI
+    //         routes: {
+    //           //we will add the screen here for easy navigation
+    //           LoginScreen.id :(context) => LoginScreen(),
+    //           PhoneAuthScreen.id:(context) => PhoneAuthScreen(),
+    //           LocationScreen.id:(context) => LocationScreen(),
+    //         },
+    //       );
+    //     }
+    //   },
+    // );
   }
 }
 

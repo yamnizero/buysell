@@ -1,8 +1,5 @@
-
-
-import 'dart:ffi';
-
 import 'package:buysell/screen/authentication/phoneauth_screen.dart';
+import 'package:buysell/services/phoneauth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +17,11 @@ class OTPScreen extends StatefulWidget {
 }
 
 class _OTPScreenState extends State<OTPScreen> {
+
+  bool _loading = false;
+  String error="";
+
+  PhoneAuthServices _services = PhoneAuthServices();
 
   var _text1 = TextEditingController();
   var _text2 = TextEditingController();
@@ -193,8 +195,7 @@ class _OTPScreenState extends State<OTPScreen> {
                     ),
                     onChanged: (value)
                     {
-                      if(value.length ==1)
-                      {
+                      if(value.length ==1) {
                         if(_text1.text.length==1){
                           if(_text2.text.length==1){
                             if(_text3.text.length==1){
@@ -203,6 +204,10 @@ class _OTPScreenState extends State<OTPScreen> {
                                   //this is  the otp we have received
                                   String _otp = "${_text1.text}${_text2.text}${_text3.text}${_text4.text}${_text5.text}${_text6.text}";
 
+                                  setState(() {
+                                    _loading =true;
+                                  });
+
                                   //Login
                                   phoneCredential(context, _otp);
                                 }
@@ -210,17 +215,33 @@ class _OTPScreenState extends State<OTPScreen> {
                             }
                           }
                         }
+                      }else{
+                        setState(() {
+                          _loading =false;
+                        });
                       }
                     },
                   ),
                 ),
                 SizedBox(height: 10,),
-                LinearProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                )
 
               ],
-            )
+            ),
+            SizedBox(height: 18,),
+            if(_loading)
+            Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 50,
+                child:  LinearProgressIndicator(
+                  backgroundColor: Colors.grey.shade200,
+                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                ),
+              ),
+            ),
+            SizedBox(height: 18,),
+            //need to show if  any error
+            Text(error,style: TextStyle(color: Colors.red,fontSize: 12),)
           ],
         ),
       ),
@@ -228,7 +249,7 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
 
-  Future<Void>phoneCredential(BuildContext context,String otp)async{
+  Future<void>phoneCredential(BuildContext context,String otp)async{
     FirebaseAuth _auth = FirebaseAuth.instance;
     try{
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
@@ -238,13 +259,25 @@ class _OTPScreenState extends State<OTPScreen> {
 
       if(user !=null){
         //Signed in
-        Navigator.pushReplacementNamed(context, LocationScreen.id);
+        //will add user data to firestore
+        _services.addUser(context);
+
       }else{
         print("Login Failed");
+       if(mounted){
+         setState(() {
+           error = "Login Failed";
+         });
+       }
       }
 
     }catch(e){
       print(e.toString());
+     if(mounted){
+       setState(() {
+         error = "Invalid OTP";
+       });
+     }
     }
   }
 }
