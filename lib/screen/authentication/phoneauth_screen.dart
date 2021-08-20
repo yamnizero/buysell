@@ -1,6 +1,7 @@
 import 'package:buysell/services/phoneauth_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:legacy_progress_dialog/legacy_progress_dialog.dart';
 
 class PhoneAuthScreen extends StatefulWidget {
   static const String id = "phone-auth-screen";
@@ -16,15 +17,19 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   var countryCodeController = TextEditingController(text: "+249");
   var phoneNumberController = TextEditingController();
 
-  @override
-  void dispose() {
-    showAlertDialog(context);
-    super.dispose();
-  }
 
 
   @override
   Widget build(BuildContext context) {
+
+    //Create an instance of ProgressDialog
+    ProgressDialog progressDialog = ProgressDialog(
+      context: context,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+      loadingText: "Please wait ",
+      progressIndicatorColor: Theme.of(context).primaryColor,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -119,9 +124,8 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
           ),
               onPressed: ()
               {
+                progressDialog.show();
                 String number = '${countryCodeController.text}${phoneNumberController.text}';
-
-                showAlertDialog(context);
 
                 _services.verifyPhoneNumber(context, number);
               },
@@ -142,25 +146,27 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
 
 
 
-  //alert dialog
- showAlertDialog(BuildContext context){
-    AlertDialog alert = AlertDialog(
-      content: Row(
-        children: [
-          CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-          ),
-          SizedBox(width: 8,),
-          Text("Please wait")
-        ],
-      ),
-    );
-    showDialog(
-        barrierDismissible:false ,
-        context: context, builder: (BuildContext context){
-      return alert;
-    });
- }
+ //  //alert dialog
+ // showAlertDialog(BuildContext context){
+ //    AlertDialog alert = AlertDialog(
+ //      content: Row(
+ //        children: [
+ //          CircularProgressIndicator(
+ //            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+ //          ),
+ //          SizedBox(width: 8,),
+ //          Text("Please wait")
+ //        ],
+ //      ),
+ //    );
+ //    showDialog(
+ //        barrierDismissible:false ,
+ //        context: context, builder: (BuildContext context){
+ //      return alert;
+ //    });
+ // }
+
+
 
   PhoneAuthServices _services = PhoneAuthServices();
 

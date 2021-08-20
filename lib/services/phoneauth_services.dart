@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class PhoneAuthServices {
   FirebaseAuth auth = FirebaseAuth.instance;
 
+
+
   Future<void> verifyPhoneNumber(BuildContext context,number) async {
     final PhoneVerificationCompleted verificationCompleted = (
         PhoneAuthCredential credential) async {
@@ -22,7 +24,7 @@ class PhoneAuthServices {
 
     final PhoneCodeSent codeSent =  (String verId, int resendToken)async {
       //if OTP send now new screen  to should open to enter OTP.
-     Navigator.push(context, MaterialPageRoute(builder: (context)=>OTPScreen(number: number,)));
+     Navigator.push(context, MaterialPageRoute(builder: (context)=>OTPScreen(number: number,verId: verId,)));
     };
 
 

@@ -1,4 +1,5 @@
 import 'package:buysell/screen/authentication/phoneauth_screen.dart';
+import 'package:buysell/screen/location_screen.dart';
 import 'package:buysell/screen/login_screen.dart';
 import 'package:buysell/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,9 +35,12 @@ class MyApp extends StatelessWidget {
               primaryColor: Colors.cyan.shade900,
             ),
             home: LoginScreen(),
+            //initial route is not working with our current UI
             routes: {
+              //we will add the screen here for easy navigation
               LoginScreen.id :(context) => LoginScreen(),
               PhoneAuthScreen.id:(context) => PhoneAuthScreen(),
+              LocationScreen.id:(context) => LocationScreen(),
             },
           );
         }
