@@ -214,6 +214,10 @@ class _OTPScreenState extends State<OTPScreen> {
                     },
                   ),
                 ),
+                SizedBox(height: 10,),
+                LinearProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                )
 
               ],
             )

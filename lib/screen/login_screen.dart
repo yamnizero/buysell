@@ -1,4 +1,5 @@
 import 'package:buysell/Widgets/auth_ui.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -6,6 +7,19 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
+    FirebaseAuth.instance
+        .authStateChanges()
+        .listen((User user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        //if already logged in it will not ask again  to login
+      Navigator.pushReplacementNamed(context, LoginScreen.id);
+      }
+    });
+
     return Scaffold(
       backgroundColor: Colors.cyan.shade900,
       body: Column(
