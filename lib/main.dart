@@ -1,4 +1,5 @@
 import 'package:buysell/screen/authentication/phoneauth_screen.dart';
+import 'package:buysell/screen/home_screen.dart';
 import 'package:buysell/screen/location_screen.dart';
 import 'package:buysell/screen/login_screen.dart';
 import 'package:buysell/screen/splash_screen.dart';
@@ -28,6 +29,8 @@ class MyApp extends StatelessWidget {
                   LoginScreen.id :(context) => LoginScreen(),
                   PhoneAuthScreen.id:(context) => PhoneAuthScreen(),
                   LocationScreen.id:(context) => LocationScreen(),
+                  HomeScreen.id:(context) => HomeScreen(),
+
       },
 
     );
