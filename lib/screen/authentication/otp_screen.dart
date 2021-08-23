@@ -260,7 +260,7 @@ class _OTPScreenState extends State<OTPScreen> {
       if(user !=null){
         //Signed in
         //will add user data to firestore
-        _services.addUser(context);
+        _services.addUser(context,user.uid);
 
       }else{
         print("Login Failed");

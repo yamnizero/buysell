@@ -1,4 +1,7 @@
+import 'package:buysell/screen/authentication/google_auth.dart';
 import 'package:buysell/screen/authentication/phoneauth_screen.dart';
+import 'package:buysell/services/phoneauth_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -14,8 +17,11 @@ class AuthUi extends StatelessWidget {
           SizedBox(
             width: 220,
             child: ElevatedButton(
-                style:ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white)
+                style:ElevatedButton.styleFrom(
+               primary: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3.0)
+                  ),
                 ),
                 onPressed: ()
                 {
@@ -32,7 +38,14 @@ class AuthUi extends StatelessWidget {
           SignInButton(
               Buttons.Google,
               text:"Continue with Google",
-              onPressed: (){}),
+              onPressed: () async{
+                User user = await GoogleAuthentication.signInWithGoogle(context: context);
+                if(user!=null){
+                  //login success
+                 PhoneAuthServices _authentication = PhoneAuthServices();
+                 _authentication.addUser(context, user.uid)
+                }
+              }),
           SignInButton(
               Buttons.FacebookNew,
               text:"Continue with Facebook",

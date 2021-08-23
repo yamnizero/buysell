@@ -1,6 +1,5 @@
 import 'package:buysell/screen/home_screen.dart';
-import 'package:buysell/screen/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -53,7 +52,10 @@ class _LocationScreenState extends State<LocationScreen> {
     return Scaffold(
       body: Column(
         children: [
-          Image.asset("assets/images/location.jpg"),
+          Expanded(
+            flex: 2,
+            child: Image.asset("assets/images/location.jpg"),
+          ),
           SizedBox(height: 20,),
           Text("Where do  want\nto buy/sell products",
           textAlign: TextAlign.center,

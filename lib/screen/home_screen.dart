@@ -1,3 +1,5 @@
+import 'package:buysell/screen/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -36,9 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.only(top:8,bottom: 8),
               child: Row(
-                children: [
+                children:
+                [
                   Icon(CupertinoIcons.location_solid,color: Colors.black,size: 18,),
-                  Text(address,style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),),
+                  Flexible(child: Text(address,style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),)),
                   Icon(Icons.keyboard_arrow_down_outlined,color: Colors.black,size: 18,),
                 ],
               ),
@@ -47,7 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Center(
-        child: Text("HomeScreen "),
+        child: ElevatedButton(
+          child: Text("Sign Out",),
+          onPressed: (){
+            FirebaseAuth.instance.signOut().then((value){
+              Navigator.pushReplacementNamed(context, LoginScreen.id);
+            });
+          },
+        ),
       ),
     );
   }
@@ -55,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<String>getAddress()async{
     // From coordinates
     //geocoder: ^0.2.1
-    final coordinates = new Coordinates(1.10, 45.50);
+    final coordinates = new Coordinates(widget.locationData.latitude,widget.locationData.longitude);
      var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
 
