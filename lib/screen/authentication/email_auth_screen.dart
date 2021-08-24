@@ -1,4 +1,5 @@
 
+import 'package:buysell/services/emailauth_services.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,8 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
   var _emailController = TextEditingController();
   var _passwordController = TextEditingController();
 
+  EmailAuthentication _services = EmailAuthentication();
+
 
   _validateEmail(){
     //if email and password has entered
@@ -29,6 +32,17 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
         setState(() {
           _validate = false;
           _loading = true;
+        });
+
+        _services.getAdminCredential(
+          context:context,
+          isLog:_login,
+          password:_passwordController.text,
+          email:_emailController.text
+        ).then((value){
+          setState(() {
+            _loading = false;
+          });
         });
     }
   }
@@ -117,9 +131,26 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                   }
                 },
               ),
+              SizedBox(height: 10,),
+              Row(
+                children: [
+                  Text(_login ? "New account ?" : "Already has an account?"),
+                  TextButton(
+                    child: Text( _login ? "Register" :"Login" ,
+                    style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold ),
+                    ),
+                      onPressed: (){
+                      setState(() {
+                        _login = !_login;
+                      });
+                      },
+                  )
 
+                ],
+              )
             ],
           ),
+
         ),
       ),
       bottomNavigationBar: SafeArea(
