@@ -1,3 +1,4 @@
+import 'package:buysell/screen/authentication/email_auth_screen.dart';
 import 'package:buysell/screen/authentication/google_auth.dart';
 import 'package:buysell/screen/authentication/phoneauth_screen.dart';
 import 'package:buysell/services/phoneauth_services.dart';
@@ -43,7 +44,7 @@ class AuthUi extends StatelessWidget {
                 if(user!=null){
                   //login success
                  PhoneAuthServices _authentication = PhoneAuthServices();
-                 _authentication.addUser(context, user.uid)
+                 _authentication.addUser(context, user.uid);
                 }
               }),
           SignInButton(
@@ -54,14 +55,20 @@ class AuthUi extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text("OR",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Login with Email",
-              style: TextStyle(
+          InkWell(
+            onTap: (){
+              Navigator.pushNamed(context, EmailAuthScreen.id);
+            },
+            child: Container(
+              child: Text(
+                "Login with Email",
+                style: TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                decoration: TextDecoration.underline
+                  fontSize: 18,
+                ),
+              ),
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color:Colors.white))
               ),
             ),
           ),

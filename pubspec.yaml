@@ -38,6 +38,7 @@ dependencies:
   location: ^4.2.0
   geocoder: ^0.2.1
   google_sign_in: ^5.0.7
+  email_validator: ^2.0.1
 
 dev_dependencies:
   flutter_test:
