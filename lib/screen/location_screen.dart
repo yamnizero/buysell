@@ -52,11 +52,8 @@ class _LocationScreenState extends State<LocationScreen> {
     return Scaffold(
       body: Column(
         children: [
-          Expanded(
-            flex: 2,
-            child: Image.asset("assets/images/location.jpg"),
-          ),
-          SizedBox(height: 20,),
+          Image.asset("assets/images/location.jpg"),
+          SizedBox(height: 50,),
           Text("Where do  want\nto buy/sell products",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold ),

@@ -12,10 +12,10 @@ class EmailAuthScreen extends StatefulWidget {
   _EmailAuthScreenState createState() => _EmailAuthScreenState();
 }
 
+
 class _EmailAuthScreenState extends State<EmailAuthScreen> {
 
   final _formKey = GlobalKey<FormState>();
-
   bool _validate = false;
   bool _login = false;
   bool _loading = false;
@@ -25,6 +25,12 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
 
   EmailAuthentication _services = EmailAuthentication();
 
+  @override
+  void initState() {
+    super.initState();
+    _emailController = new TextEditingController();
+    _emailController.text = '';
+  }
 
   _validateEmail(){
     //if email and password has entered
@@ -87,6 +93,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
               ),
               SizedBox(height: 10,),
               TextFormField(
+                autofocus: true,
                 controller: _emailController,
                 validator: (value){
                   //need to check email entered is a valid email or not, we will use package for that "email_validator: ^2.0.1"
@@ -109,8 +116,19 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
               ),
               SizedBox(height: 10,),
               TextFormField(
+                autofocus: true,
                 controller: _passwordController,
                 decoration: InputDecoration(
+                  suffixIcon: _validate ? IconButton(
+                      icon: Icon(Icons.clear),
+                    onPressed: (){
+                        _passwordController.clear();
+                        setState(() {
+                          _validate =false;
+                        });
+                    },
+
+                  ) : null,
                   contentPadding: EdgeInsets.only(left: 10),
                   labelText: "Password",
                   filled: true,
@@ -118,6 +136,9 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
                 ),
                 onChanged: (value){
+                  // TextSelection previousSelection = _emailController.selection;
+                  // _emailController.text =  _emailController.text;
+                  // _emailController.selection = previousSelection;
                   if(_emailController.text.isNotEmpty){
                     if(value.length>3){
                       setState(() {

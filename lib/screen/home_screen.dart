@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
+        automaticallyImplyLeading: false ,
         title:InkWell(
             onTap: (){},
           child: Container(
@@ -38,8 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: const EdgeInsets.only(top:8,bottom: 8),
               child: Row(
+
                 children:
                 [
+
                   Icon(CupertinoIcons.location_solid,color: Colors.black,size: 18,),
                   Flexible(child: Text(address,style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),)),
                   Icon(Icons.keyboard_arrow_down_outlined,color: Colors.black,size: 18,),
