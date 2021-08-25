@@ -1,8 +1,11 @@
 
 import 'package:buysell/services/emailauth_services.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'reset_password_screen.dart';
 
 class EmailAuthScreen extends StatefulWidget {
 
@@ -25,6 +28,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
 
   EmailAuthentication _services = EmailAuthentication();
 
+  //sol the textController
   @override
   void initState() {
     super.initState();
@@ -117,6 +121,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
               SizedBox(height: 10,),
               TextFormField(
                 autofocus: true,
+                obscureText: true,
                 controller: _passwordController,
                 decoration: InputDecoration(
                   suffixIcon: _validate ? IconButton(
@@ -153,6 +158,17 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                 },
               ),
               SizedBox(height: 10,),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    child: Text("Forgot password?",
+                    style: TextStyle(fontWeight: FontWeight.bold,color: Colors.blue),
+                    ),
+                    onPressed: (){
+                      Navigator.pushNamed(context, PasswordResetScreen.id);
+                    },
+                  ),
+              ),
               Row(
                 children: [
                   Text(_login ? "New account ?" : "Already has an account?"),

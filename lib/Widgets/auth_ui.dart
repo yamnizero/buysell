@@ -1,4 +1,5 @@
 import 'package:buysell/screen/authentication/email_auth_screen.dart';
+import 'package:buysell/screen/authentication/email_verification_screen.dart';
 import 'package:buysell/screen/authentication/google_auth.dart';
 import 'package:buysell/screen/authentication/phoneauth_screen.dart';
 import 'package:buysell/services/phoneauth_services.dart';

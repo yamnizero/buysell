@@ -1,4 +1,5 @@
 
+import 'package:buysell/screen/authentication/email_verification_screen.dart';
 import 'package:buysell/screen/location_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -75,8 +76,13 @@ class EmailAuthentication{
            'uid' : userCredential.user.uid,
            'mobile' : null,
            'email' : userCredential.user.email
-         }).then((value) {
-           Navigator.pushReplacementNamed(context, LocationScreen.id);
+         }).then((value) async {
+           //will send email verification
+           await userCredential.user.sendEmailVerification().then((value){
+             //screen will move to Email Verification Screen
+             Navigator.pushReplacementNamed(context, EmailVerificationScreen.id);
+           });
+
          }).catchError((onError){
            ScaffoldMessenger.of(context).showSnackBar(
              const SnackBar(

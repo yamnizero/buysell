@@ -7,6 +7,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'screen/authentication/email_auth_screen.dart';
+import 'screen/authentication/email_verification_screen.dart';
+import 'screen/authentication/reset_password_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,9 +35,9 @@ class MyApp extends StatelessWidget {
                   LocationScreen.id:(context) => LocationScreen(),
                   HomeScreen.id:(context) => HomeScreen(),
                   EmailAuthScreen.id:(context) => EmailAuthScreen(),
-
+                  EmailVerificationScreen.id:(context) => EmailVerificationScreen(),
+                  PasswordResetScreen.id:(context) => PasswordResetScreen(),
       },
-
     );
 
     // return  FutureBuilder(
