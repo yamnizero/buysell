@@ -63,7 +63,7 @@ class _LocationScreenState extends State<LocationScreen> {
   String countryValue = "";
   String stateValue = "";
   String cityValue = "";
-  String address = "";
+  String manualAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +139,10 @@ class _LocationScreenState extends State<LocationScreen> {
                       ),
                     ),
                     ListTile(
-                      onTap: () {},
+                      onTap: ()
+                      {
+
+                      },
                       horizontalTitleGap: 0.0,
                       leading: Icon(
                         Icons.my_location,
@@ -184,10 +187,11 @@ class _LocationScreenState extends State<LocationScreen> {
                           });
                         },
                         onCityChanged:(value) {
-                          setState(() {
-                            cityValue = value;
-                            _address = '$cityValue, $stateValue, ${countryValue.substring(8)}';
-                          });
+                           setState(() {
+                             cityValue = value;
+                             manualAddress = '$cityValue, $stateValue, $countryValue';
+                           });
+                           //send this address to firestore too
                         },
 
                       ),

@@ -72,7 +72,7 @@ class EmailAuthentication{
        );
        if(userCredential.user.uid!=null){
          //login success. add user data to firestore
-         return users.doc(userCredential.user.email).set({
+         return users.doc(userCredential.user.uid).set({
            'uid' : userCredential.user.uid,
            'mobile' : null,
            'email' : userCredential.user.email
