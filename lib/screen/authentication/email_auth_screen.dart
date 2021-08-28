@@ -121,7 +121,6 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
               ),
               SizedBox(height: 10,),
               TextFormField(
-                autofocus: true,
                 obscureText: true,
                 controller: _passwordController,
                 decoration: InputDecoration(

@@ -1,3 +1,5 @@
+import 'package:buysell/Widgets/custom_appBar.dart';
+import 'package:buysell/screen/location_screen.dart';
 import 'package:buysell/screen/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,30 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        automaticallyImplyLeading: false ,
-        title:InkWell(
-            onTap: (){},
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.only(top:8,bottom: 8),
-              child: Row(
-
-                children:
-                [
-
-                  Icon(CupertinoIcons.location_solid,color: Colors.black,size: 18,),
-                  Flexible(child: Text(address,style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),)),
-                  Icon(Icons.keyboard_arrow_down_outlined,color: Colors.black,size: 18,),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56),
+          child: CustomAppBar()),
       body: Center(
         child: ElevatedButton(
           child: Text("Sign Out",),

@@ -1,8 +1,7 @@
 import 'package:buysell/screen/home_screen.dart';
-import 'package:buysell/screen/login_screen.dart';
+import 'package:buysell/services/firebase_services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csc_picker/csc_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
@@ -17,6 +16,9 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+
+  FirebaseServices _services = FirebaseServices();
+
   bool _loading = false;
   Location location = new Location();
 
@@ -141,7 +143,19 @@ class _LocationScreenState extends State<LocationScreen> {
                     ListTile(
                       onTap: ()
                       {
-
+                       // save address to firestore
+                        progressDialog.show();
+                        getLocation().then((value) {
+                        if(value!=null){
+                          _services.updateUser({
+                            'location' : GeoPoint(value.latitude, value.longitude),
+                            'address' : _address
+                          }, context).then((value){
+                            progressDialog.dismiss();
+                            Navigator.pushNamed(context, HomeScreen.id);
+                          });
+                        }
+                        });
                       },
                       horizontalTitleGap: 0.0,
                       leading: Icon(
@@ -192,8 +206,16 @@ class _LocationScreenState extends State<LocationScreen> {
                              manualAddress = '$cityValue, $stateValue, $countryValue';
                            });
                            //send this address to firestore too
+                          if(value!=null){
+                            _services.updateUser({
+                              //add data
+                              'address' : manualAddress,
+                              'state' : stateValue,
+                              'city':cityValue,
+                              'country' : countryValue
+                            }, context);
+                          }
                         },
-
                       ),
                     ),
 

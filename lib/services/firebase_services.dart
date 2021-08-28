@@ -2,6 +2,7 @@ import 'package:buysell/screen/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
 
 class FirebaseServices{
 
@@ -10,9 +11,11 @@ class FirebaseServices{
 
   Future<void> updateUser(Map<String,dynamic>data,context) {
     return users
-        .doc(users.id)
+        .doc(user.uid)
         .update(data)
-        .then((value) => Navigator.pushNamed(context, HomeScreen.id),)
+        .then((value) {
+      Navigator.pushNamed(context, HomeScreen.id);
+    })
         .catchError((error){
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -20,5 +23,17 @@ class FirebaseServices{
         ),
       );
     });
+  }
+
+
+
+  Future<String>getAddress(lat,long)async{
+    // From coordinates
+    final coordinates = new Coordinates(lat, long);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+   var first = addresses.first;
+
+   return first.addressLine;
+
   }
 }
