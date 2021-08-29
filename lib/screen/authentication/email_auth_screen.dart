@@ -43,6 +43,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
           _validate = false;
           _loading = true;
         });
+        print("_validateEmail here" );
 
         _services.getAdminCredential(
           context:context,
@@ -53,7 +54,13 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
           setState(() {
             _loading = false;
           });
+        }).catchError((e){
+          print("_validateEmail Error" );
+          print(e);
+
         });
+    }else{
+      print("_validateEmail  invailEmail" );
     }
   }
 
@@ -101,14 +108,14 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                 autofocus: true,
                 controller: _emailController,
                 validator: (value){
-                  //need to check email entered is a valid email or not, we will use package for that "email_validator: ^2.0.1"
+                  //need to check email entered is a valid email or not,i will use package for that "email_validator: ^2.0.1"
                   final bool isValid = EmailValidator.validate(_emailController.text);
                   if(value == null || value.isEmpty){
                     return "Enter email";
                   }
-                  if(value.isNotEmpty && isValid == false){
-                    return "Enter valid email";
-                  }
+                  // if(value.isNotEmpty && isValid == false){
+                  //   return "Enter valid email";
+                  // }
                   return null;
                 },
                 decoration: InputDecoration(
@@ -202,6 +209,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
               ),
               onPressed: ()
               {
+                print("_validateEmail call" );
              _validateEmail();
               },
               child: Padding(

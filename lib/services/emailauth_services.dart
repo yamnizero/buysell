@@ -10,29 +10,36 @@ class EmailAuthentication{
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   Future<DocumentSnapshot> getAdminCredential(
       {email, password, isLog, context}) async {
-    DocumentSnapshot _result = await users.doc(email).get();
-
-
-    if(isLog){
-      //direct login
-      emailLogin(email,password,context);
-    }else{
-      //if register
-      if(_result.exists){
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An account already exists with this email'),
-          ),
-        );
+    try {
+      DocumentSnapshot _result = await users.doc(email).get();
+      if(isLog){
+        //direct login
+        emailLogin(email,password,context);
       }else{
-        //register  as new  user
-        emailRegister(email,password,context);
+        //if register
+        if(_result.exists){
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('An account already exists with this email'),
+            ),
+          );
+        }else{
+          //register  as new  user
+          emailRegister(email,password,context);
+        }
       }
+
+
+
+      return _result;
+    } catch (e) {
+      print("validateEmail firebase");
+      print(e);
+      throw e;
     }
 
 
 
-    return _result;
   }
 
   emailLogin(email, password, context) async  {
@@ -103,6 +110,12 @@ class EmailAuthentication{
          ScaffoldMessenger.of(context).showSnackBar(
            const SnackBar(
              content: Text('The account already exists for that email.'),
+           ),
+         );
+       } else {
+         ScaffoldMessenger.of(context).showSnackBar(
+           SnackBar(
+             content: Text("error: ${e.code}"),
            ),
          );
        }

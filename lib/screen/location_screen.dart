@@ -19,7 +19,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   FirebaseServices _services = FirebaseServices();
 
-  bool _loading = false;
+  bool _loading = true;
   Location location = new Location();
 
   bool _serviceEnabled;
@@ -69,6 +69,25 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    _services.users
+        .doc(_services.user.uid)
+        .get()
+        .then((DocumentSnapshot document) {
+      if(document.exists){
+        if(document['address']!=null){
+          //mean location had already Update
+          setState(() {
+            _loading =true;
+          });
+          Navigator.pushNamed(context, HomeScreen.id);
+        }else{
+          setState(() {
+            _loading = false;
+          });
+      }
+      }
+    });
 
     //Create an instance of ProgressDialog
     ProgressDialog progressDialog = ProgressDialog(
@@ -188,6 +207,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       padding: const EdgeInsets.fromLTRB(10,0,10,0),
                       child: CSCPicker(
                         layout: Layout.vertical,
+                        flagState: CountryFlag.DISABLE,
                         dropdownDecoration: BoxDecoration(shape: BoxShape.rectangle),
                         defaultCountry: DefaultCountry.Sudan,
                         onCountryChanged: (value) {
@@ -229,6 +249,8 @@ class _LocationScreenState extends State<LocationScreen> {
     }
 
 
+
+
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -255,68 +277,73 @@ class _LocationScreenState extends State<LocationScreen> {
           SizedBox(
             height: 30,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _loading
-                      ? Center(
+          _loading ? Column(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 8,),
+              Text("Finding location...")
+            ],
+          ) : Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _loading
+                          ? Center(
                           child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              Theme.of(context).primaryColor),
-                        ))
-                      : ElevatedButton.icon(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Theme.of(context).primaryColor)),
-                          icon: Icon(CupertinoIcons.location_fill),
-                          label: Padding(
-                            padding: const EdgeInsets.only(top: 15, bottom: 15),
-                            child: Text(
-                              "Around me",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).primaryColor),
+                          ))
+                          : ElevatedButton.icon(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Theme.of(context).primaryColor)),
+                        icon: Icon(CupertinoIcons.location_fill),
+                        label: Padding(
+                          padding: const EdgeInsets.only(top: 15, bottom: 15),
+                          child: Text(
+                            "Around me",
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _loading = true;
-                            });
-                            getLocation().then((value) {
-                              if (value != null) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        HomeScreen(
-                                      locationData: _locationData,
-                                    ),
-                                  ),
-                                );
-                              }
-                            });
-                          },
                         ),
-                ),
-              ],
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              progressDialog.show();
-              showBottomScreen(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration:
-                    BoxDecoration(border: Border(bottom: BorderSide(width: 2))),
-                child: Text(
-                  "Set location manually",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                        onPressed: () {
+                          progressDialog.show();
+                          getLocation().then((value) {
+                            if (value != null) {
+                              _services.updateUser({
+                                'address' : _address,
+                                'location' : GeoPoint(value.latitude,value.longitude),
+                              }, context).whenComplete(() {
+                                progressDialog.dismiss();
+                              });
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
+              InkWell(
+                onTap: () {
+                  progressDialog.show();
+                  showBottomScreen(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration:
+                    BoxDecoration(border: Border(bottom: BorderSide(width: 2))),
+                    child: Text(
+                      "Set location manually",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
