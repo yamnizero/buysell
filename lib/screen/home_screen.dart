@@ -1,3 +1,4 @@
+import 'package:buysell/Widgets/banner_widget.dart';
 import 'package:buysell/Widgets/custom_appBar.dart';
 import 'package:buysell/screen/location_screen.dart';
 import 'package:buysell/screen/login_screen.dart';
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.amberAccent,
+
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(56),
           child: SafeArea(child: CustomAppBar())),
@@ -52,7 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(width: 10,),
                   Icon(Icons.notifications_none),
+                  SizedBox(width: 10,),
                 ],
               ),
             ),
@@ -61,7 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
             child: Column(
               children: [
-
+                //banner
+                 BannerWidget(),
+                //category
               ],
             ),
           )
@@ -71,3 +76,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 }
+
+//category
+//car
+//job
+//properties
+//mobile
+//furniture
+//commercial vehicles
+//sports
+//service
