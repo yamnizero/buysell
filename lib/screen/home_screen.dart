@@ -24,18 +24,48 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.amberAccent,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(56),
           child: SafeArea(child: CustomAppBar())),
-      body: Center(
-        child: ElevatedButton(
-          child: Text("Sign Out",),
-          onPressed: (){
-            FirebaseAuth.instance.signOut().then((value){
-              Navigator.pushReplacementNamed(context, LoginScreen.id);
-            });
-          },
-        ),
+      body: Column(
+        children: [
+          Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 40,
+                      child: TextField(
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.search),
+                            labelText: "Find Card, Mobile and many more",
+                            labelStyle: TextStyle(fontSize: 12),
+                            contentPadding: EdgeInsets.only(left: 10,right: 10),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            )
+                        ),
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.notifications_none),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+            child: Column(
+              children: [
+
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

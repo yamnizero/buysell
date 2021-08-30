@@ -80,7 +80,7 @@ class _LocationScreenState extends State<LocationScreen> {
           setState(() {
             _loading =true;
           });
-          Navigator.pushNamed(context, HomeScreen.id);
+          Navigator.pushReplacementNamed(context, HomeScreen.id);
         }else{
           setState(() {
             _loading = false;
@@ -283,7 +283,8 @@ class _LocationScreenState extends State<LocationScreen> {
               SizedBox(height: 8,),
               Text("Finding location...")
             ],
-          ) : Column(
+          ) :
+          Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),

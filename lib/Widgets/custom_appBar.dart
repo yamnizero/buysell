@@ -22,12 +22,12 @@ class CustomAppBar extends StatelessWidget {
           return Text("Something went wrong");
         }
 
-        if (snapshot.hasData && !snapshot.data.exists) {
+        if (!snapshot.hasData && !snapshot.data.exists) {
           return Text("Address not selected  ");
         }
 
-        if (snapshot.hasData) {
-          Map<String, dynamic> data = snapshot.data.data();
+        if (snapshot.connectionState==ConnectionState.done) {
+          Map<String, dynamic> data = snapshot.data.data() ;
 
           if(data['address']==null){
             //will check next data
@@ -47,7 +47,7 @@ class CustomAppBar extends StatelessWidget {
 
         }
 
-        return Text("fetching location..");
+        return appBar("Fetching location", context);
       },
     );
   }
@@ -69,7 +69,6 @@ class CustomAppBar extends StatelessWidget {
 
               children:
               [
-
                 Icon(CupertinoIcons.location_solid,color: Colors.black,size: 18,),
                 Flexible(child: Text(address,style: TextStyle(color: Colors.black,fontSize: 12,fontWeight: FontWeight.bold),)),
                 Icon(Icons.keyboard_arrow_down_outlined,color: Colors.black,size: 18,),

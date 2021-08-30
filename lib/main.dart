@@ -5,7 +5,6 @@ import 'package:buysell/screen/login_screen.dart';
 import 'package:buysell/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'screen/authentication/email_auth_screen.dart';
 import 'screen/authentication/email_verification_screen.dart';
 import 'screen/authentication/reset_password_screen.dart';
@@ -23,7 +22,8 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-        theme: ThemeData(
+        theme: ThemeData
+          (
                   primaryColor: Colors.cyan.shade900,
                  ),
       initialRoute: SplashScreen.id,
