@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class PasswordResetScreen extends StatelessWidget {
   static const String id = "password-reset-screen";
+
   @override
   Widget build(BuildContext context) {
-
     var _emailController = TextEditingController();
 
     final _formKey = GlobalKey<FormState>();
@@ -22,20 +22,33 @@ class PasswordResetScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 //i can replace with some other assets
-                Icon(Icons.lock,color: Theme.of(context).primaryColor,size: 75,),
-                SizedBox(height: 10,),
+                Icon(
+                  Icons.lock,
+                  color: Theme.of(context).primaryColor,
+                  size: 75,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   "Forgot\npassword?",
-                  textAlign: TextAlign.center
-                  ,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Theme.of(context).primaryColor),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: Theme.of(context).primaryColor),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
-                    "Send us your email,\n we will send link to reset your password ",
-                    textAlign: TextAlign.center,
+                  "Send us your email,\n we will send link to reset your password ",
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
                   textAlign: TextAlign.center,
                   controller: _emailController,
@@ -44,15 +57,17 @@ class PasswordResetScreen extends StatelessWidget {
                     labelText: "Registered Email",
                     filled: true,
                     fillColor: Colors.grey.shade300,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4)),
                   ),
-                  validator: (value){
+                  validator: (value) {
                     //need to check email entered is a valid email or not, we will use package for that "email_validator: ^2.0.1"
-                    final bool isValid = EmailValidator.validate(_emailController.text);
-                    if(value == null || value.isEmpty){
+                    final bool isValid =
+                        EmailValidator.validate(_emailController.text);
+                    if (value == null || value.isEmpty) {
                       return "Enter email";
                     }
-                    if(value.isNotEmpty && isValid == false){
+                    if (value.isNotEmpty && isValid == false) {
                       return "Enter valid email";
                     }
                     return null;
@@ -64,23 +79,25 @@ class PasswordResetScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: ElevatedButton(
-       style:ElevatedButton.styleFrom(
-         primary: Theme.of(context).primaryColor ,
-         shape: RoundedRectangleBorder(
-           borderRadius: BorderRadius.circular(10.0),
-         ),
-       ),
+        style: ElevatedButton.styleFrom(
+          primary: Theme.of(context).primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text("Send"),
         ),
-        onPressed: (){
-         //it will check email entered or nope
-         if(_formKey.currentState.validate()){
-           FirebaseAuth.instance.sendPasswordResetEmail(email: _emailController.text).then((value){
-             Navigator.pushReplacementNamed(context, EmailAuthScreen.id);
-           });
-         }
+        onPressed: () {
+          //it will check email entered or nope
+          if (_formKey.currentState.validate()) {
+            FirebaseAuth.instance
+                .sendPasswordResetEmail(email: _emailController.text)
+                .then((value) {
+              Navigator.pushReplacementNamed(context, EmailAuthScreen.id);
+            });
+          }
         },
       ),
     );

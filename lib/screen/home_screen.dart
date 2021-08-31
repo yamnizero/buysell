@@ -1,12 +1,9 @@
 import 'package:buysell/Widgets/banner_widget.dart';
+import 'package:buysell/Widgets/category_widget.dart';
 import 'package:buysell/Widgets/custom_appBar.dart';
-import 'package:buysell/screen/location_screen.dart';
-import 'package:buysell/screen/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
-import 'package:geocoder/geocoder.dart';
+
 
 class HomeScreen extends StatefulWidget {
   static const String id = "home-screen";
@@ -67,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //banner
                  BannerWidget(),
                 //category
+                CategoryWidget(),
               ],
             ),
           )

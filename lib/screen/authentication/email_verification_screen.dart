@@ -58,7 +58,8 @@ class EmailVerificationScreen extends StatelessWidget {
                             },
                           );
                         }
-                        Navigator.pushReplacementNamed(context, LocationScreen.id);
+                        Navigator.pushReplacementNamed(
+                            context, LocationScreen.id);
                       },
                     ),
                   ),
@@ -70,6 +71,7 @@ class EmailVerificationScreen extends StatelessWidget {
       ),
     );
   }
+
   void showNoMailAppsDialog(BuildContext context) {
     showDialog(
       context: context,

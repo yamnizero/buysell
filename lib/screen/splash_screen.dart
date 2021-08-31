@@ -13,7 +13,6 @@ class SplashScreen extends StatefulWidget {
   static const colorizeColors = [
     Colors.white,
     Colors.cyan,
-
   ];
 
   static const colorizeTextStyle = TextStyle(
@@ -28,33 +27,35 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-   Timer( Duration(
-     seconds: 3,
-   ),(){
-     FirebaseAuth.instance.authStateChanges().listen((User user) {
-       if(user ==null){
-         Navigator.pushReplacementNamed(context, LoginScreen.id);
-       }else{
-         Navigator.pushReplacementNamed(context, LocationScreen.id);
-       }
-     });
-   });
+    Timer(
+        Duration(
+          seconds: 3,
+        ), () {
+      FirebaseAuth.instance.authStateChanges().listen((User user) {
+        if (user == null) {
+          Navigator.pushReplacementNamed(context, LoginScreen.id);
+        } else {
+          Navigator.pushReplacementNamed(context, LocationScreen.id);
+        }
+      });
+    });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.cyan.shade900,
       body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                color: Colors.white,
-              ),
-              SizedBox(height: 20,),
-              // animated Text
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Image.asset(
+            'assets/images/logo.png',
+            color: Colors.white,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          // animated Text
           AnimatedTextKit(
             animatedTexts: [
               ColorizeAnimatedText(
@@ -68,9 +69,8 @@ class _SplashScreenState extends State<SplashScreen> {
               print("Tap Event");
             },
           ),
-        ]
+        ]),
       ),
-    ),
     );
   }
 }
@@ -84,6 +84,6 @@ class Init {
     // This is where you can initialize the resources needed by your app while
     // the splash screen is displayed.  Remove the following example because
     // delaying the user experience is a bad design practice!
-    await Future.delayed(Duration(seconds:4));
+    await Future.delayed(Duration(seconds: 4));
   }
 }

@@ -67,8 +67,12 @@ class BannerWidget extends StatelessWidget {
                     Neumorphic(
                       style: NeumorphicStyle(
                         color: Colors.white,
+                        oppositeShadowLightSource: true,
                       ),
-                      child: Image.network('https://firebasestorage.googleapis.com/v0/b/buyorsell-61cca.appspot.com/o/banner%2Ficons8-carpool-100.png?alt=media&token=183ee275-902a-4a4b-b192-b4079396de3b'),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.network('https://firebasestorage.googleapis.com/v0/b/buyorsell-61cca.appspot.com/o/banner%2Ficons8-carpool-100.png?alt=media&token=183ee275-902a-4a4b-b192-b4079396de3b'),
+                      ),
 
 
                     )

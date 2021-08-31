@@ -6,8 +6,12 @@ import 'package:geocoder/geocoder.dart';
 
 class FirebaseServices{
 
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+
   User user = FirebaseAuth.instance.currentUser;
+
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference categories = FirebaseFirestore.instance.collection('categories');
+
 
   Future<void> updateUser(Map<String,dynamic>data,context) {
     return users

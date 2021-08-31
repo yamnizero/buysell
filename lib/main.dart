@@ -9,7 +9,7 @@ import 'screen/authentication/email_auth_screen.dart';
 import 'screen/authentication/email_verification_screen.dart';
 import 'screen/authentication/reset_password_screen.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
@@ -19,24 +19,22 @@ void main() async{
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-        theme: ThemeData
-          (
-                  primaryColor: Colors.cyan.shade900,
-                 ),
+      theme: ThemeData(
+        primaryColor: Colors.cyan.shade900,
+      ),
       initialRoute: SplashScreen.id,
       routes: {
         //we will add the screen here for easy navigation
-                  SplashScreen.id :(context) => SplashScreen(),
-                  LoginScreen.id :(context) => LoginScreen(),
-                  PhoneAuthScreen.id:(context) => PhoneAuthScreen(),
-                  LocationScreen.id:(context) => LocationScreen(),
-                  HomeScreen.id:(context) => HomeScreen(),
-                  EmailAuthScreen.id:(context) => EmailAuthScreen(),
-                  EmailVerificationScreen.id:(context) => EmailVerificationScreen(),
-                  PasswordResetScreen.id:(context) => PasswordResetScreen(),
+        SplashScreen.id: (context) => SplashScreen(),
+        LoginScreen.id: (context) => LoginScreen(),
+        PhoneAuthScreen.id: (context) => PhoneAuthScreen(),
+        LocationScreen.id: (context) => LocationScreen(),
+        HomeScreen.id: (context) => HomeScreen(),
+        EmailAuthScreen.id: (context) => EmailAuthScreen(),
+        EmailVerificationScreen.id: (context) => EmailVerificationScreen(),
+        PasswordResetScreen.id: (context) => PasswordResetScreen(),
       },
     );
 
@@ -73,4 +71,3 @@ class MyApp extends StatelessWidget {
     // );
   }
 }
-
