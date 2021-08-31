@@ -1,3 +1,4 @@
+import 'package:buysell/screen/categories/category_list.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +31,9 @@ class CategoryWidget extends StatelessWidget {
                     children: [
                       Expanded(child: Text("Categories")),
                       TextButton(
-                        onPressed: ()
-                        {
+                        onPressed: () {
                           //list of categories
+                          Navigator.pushNamed(context, CategoryListScreen.id);
                         },
                         child: Row(
                           children: [
@@ -54,25 +55,31 @@ class CategoryWidget extends StatelessWidget {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: snapshot.data.docs.length,
-                      itemBuilder: (BuildContext context,int index){
-
+                      itemBuilder: (BuildContext context, int index) {
                         var doc = snapshot.data.docs[index];
 
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-
-                          width: 60,
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: 60,
                             height: 50,
                             child: Column(
                               children: [
                                 Image.network(doc['image']),
-                                Text(doc['catName'],style: TextStyle(fontSize: 10),),
+                                Flexible(
+                                  child: Text(
+                                    doc['catName'].toUpperCase(),
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                ),
                               ],
                             ),
-                        ),
-                      );
-                    },),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

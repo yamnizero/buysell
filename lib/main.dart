@@ -1,4 +1,6 @@
 import 'package:buysell/screen/authentication/phoneauth_screen.dart';
+import 'package:buysell/screen/categories/category_list.dart';
+import 'package:buysell/screen/categories/subCategories_screen.dart';
 import 'package:buysell/screen/home_screen.dart';
 import 'package:buysell/screen/location_screen.dart';
 import 'package:buysell/screen/login_screen.dart';
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
         EmailAuthScreen.id: (context) => EmailAuthScreen(),
         EmailVerificationScreen.id: (context) => EmailVerificationScreen(),
         PasswordResetScreen.id: (context) => PasswordResetScreen(),
+        CategoryListScreen.id: (context) => CategoryListScreen(),
+        SubCategoriesList.id: (context) => SubCategoriesList(),
       },
     );
 

@@ -11,6 +11,9 @@ import 'package:location/location.dart';
 class LocationScreen extends StatefulWidget {
   static const String id = "location-screen";
 
+  final bool locationChanging;
+  const LocationScreen({this.locationChanging});
+
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
@@ -70,24 +73,33 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
 
-    _services.users
-        .doc(_services.user.uid)
-        .get()
-        .then((DocumentSnapshot document) {
-      if(document.exists){
-        if(document['address']!=null){
-          //mean location had already Update
-          setState(() {
-            _loading =true;
-          });
-          Navigator.pushReplacementNamed(context, HomeScreen.id);
-        }else{
-          setState(() {
-            _loading = false;
-          });
-      }
-      }
-    });
+    //fetching location from firestore
+    if(widget.locationChanging==null){
+
+      _services.users
+          .doc(_services.user.uid)
+          .get()
+          .then((DocumentSnapshot document) {
+        if(document.exists){
+          if(document['address']!=null){
+            //mean location had already Update
+            setState(() {
+              _loading =true;
+            });
+            Navigator.pushReplacementNamed(context, HomeScreen.id);
+          }else{
+            setState(() {
+              _loading = false;
+            });
+          }
+        }
+      });
+    }else{
+     setState(() {
+       _loading= false;
+     });
+    }
+
 
     //Create an instance of ProgressDialog
     ProgressDialog progressDialog = ProgressDialog(
