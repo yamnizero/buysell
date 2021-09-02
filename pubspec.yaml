@@ -42,6 +42,7 @@ dependencies:
   open_mail_app: ^0.2.0
   csc_picker: ^0.2.5
   flutter_neumorphic: ^3.1.0
+  convex_bottom_bar: ^3.0.0
 
 
  # Testing

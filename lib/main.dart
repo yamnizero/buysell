@@ -4,12 +4,18 @@ import 'package:buysell/screen/categories/subCategories_screen.dart';
 import 'package:buysell/screen/home_screen.dart';
 import 'package:buysell/screen/location_screen.dart';
 import 'package:buysell/screen/login_screen.dart';
+import 'package:buysell/screen/sellItems/seller_category_list.dart';
 import 'package:buysell/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'screen/account_screen.dart';
 import 'screen/authentication/email_auth_screen.dart';
 import 'screen/authentication/email_verification_screen.dart';
 import 'screen/authentication/reset_password_screen.dart';
+import 'screen/chat_screen.dart';
+import 'screen/main_screen.dart';
+import 'screen/myAd_screen.dart';
+import 'screen/sellItems/seller_subCat.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +45,12 @@ class MyApp extends StatelessWidget {
         PasswordResetScreen.id: (context) => PasswordResetScreen(),
         CategoryListScreen.id: (context) => CategoryListScreen(),
         SubCategoriesList.id: (context) => SubCategoriesList(),
+        MainScreen.id: (context) => MainScreen(),
+        ChatScreen.id: (context) => ChatScreen(),
+        MyAdsScreen.id: (context) => MyAdsScreen(),
+        AccountScreen.id: (context) => AccountScreen(),
+        SellerCategory.id: (context) => SellerCategory(),
+        SellerSubCatList.id: (context) => SellerSubCatList(),
       },
     );
 

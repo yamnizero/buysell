@@ -1,4 +1,5 @@
 import 'package:buysell/screen/home_screen.dart';
+import 'package:buysell/screen/main_screen.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csc_picker/csc_picker.dart';
@@ -86,7 +87,7 @@ class _LocationScreenState extends State<LocationScreen> {
             setState(() {
               _loading =true;
             });
-            Navigator.pushReplacementNamed(context, HomeScreen.id);
+            Navigator.pushReplacementNamed(context, MainScreen.id);
           }else{
             setState(() {
               _loading = false;

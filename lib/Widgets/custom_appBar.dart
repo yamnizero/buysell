@@ -16,8 +16,8 @@ class CustomAppBar extends StatelessWidget {
         if (snapshot.hasError) {
           return Text("Something went wrong");
         }
-
-        if (!snapshot.hasData && !snapshot.data.exists) {
+        //here
+        if (!snapshot.hasData==null && !snapshot.data.exists) {
           return Text("Address not selected  ");
         }
 
