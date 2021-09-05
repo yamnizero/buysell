@@ -1,3 +1,4 @@
+import 'package:buysell/provider/cat_provider.dart';
 import 'package:buysell/screen/authentication/phoneauth_screen.dart';
 import 'package:buysell/screen/categories/category_list.dart';
 import 'package:buysell/screen/categories/subCategories_screen.dart';
@@ -8,6 +9,8 @@ import 'package:buysell/screen/sellItems/seller_category_list.dart';
 import 'package:buysell/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'forms/seller_car_form.dart';
 import 'screen/account_screen.dart';
 import 'screen/authentication/email_auth_screen.dart';
 import 'screen/authentication/email_verification_screen.dart';
@@ -20,8 +23,18 @@ import 'screen/sellItems/seller_subCat.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  Provider.debugCheckInvalidValueType = null;
 
-  runApp(MyApp());
+  runApp(
+
+    MultiProvider(providers:
+    [
+      Provider (create: (_) => CategoryProvider()),
+
+    ],
+      child: MyApp(),));
+
+
 }
 
 class MyApp extends StatelessWidget {
@@ -51,6 +64,7 @@ class MyApp extends StatelessWidget {
         AccountScreen.id: (context) => AccountScreen(),
         SellerCategory.id: (context) => SellerCategory(),
         SellerSubCatList.id: (context) => SellerSubCatList(),
+        SellerCarForm.id: (context) => SellerCarForm(),
       },
     );
 

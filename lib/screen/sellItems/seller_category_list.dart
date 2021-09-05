@@ -1,15 +1,22 @@
-import 'package:buysell/screen/categories/subCategories_screen.dart';
+import 'package:buysell/forms/seller_car_form.dart';
+import 'package:buysell/provider/cat_provider.dart';
 import 'package:buysell/screen/sellItems/seller_subCat.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SellerCategory extends StatelessWidget {
   static const String id = "seller-category-list-screen";
 
   @override
   Widget build(BuildContext context) {
+
     FirebaseServices _services = FirebaseServices();
+
+    var _catProvider = Provider.of<CategoryProvider>(context);
+    
+
 
     return Scaffold(
       appBar: AppBar(
@@ -51,8 +58,13 @@ class SellerCategory extends StatelessWidget {
                     child: ListTile(
                       onTap: () {
                         //subCategories
+                        _catProvider.getCategory(doc['catName']);
+                        _catProvider.getCatSnapshot(doc);
                         if (doc['subCat'] == null) {
-                          return print("No Sub Categories");
+                          //here now  need  to sue provider
+
+
+                          return Navigator.pushNamed(context, SellerCarForm.id);
                         }
                         Navigator.pushNamed(context, SellerSubCatList.id,
                             arguments: doc);

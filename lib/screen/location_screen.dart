@@ -84,10 +84,13 @@ class _LocationScreenState extends State<LocationScreen> {
         if(document.exists){
           if(document['address']!=null){
             //mean location had already Update
-            setState(() {
-              _loading =true;
-            });
-            Navigator.pushReplacementNamed(context, MainScreen.id);
+            if(mounted){
+              setState(() {
+                _loading =true;
+              });
+              Navigator.pushReplacementNamed(context, MainScreen.id);
+            }
+
           }else{
             setState(() {
               _loading = false;

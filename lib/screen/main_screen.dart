@@ -32,6 +32,7 @@ class _MainScreenState extends State<MainScreen> {
         bucket: _bucket,
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.purple,
         onPressed: ()
         {
           // to make  add products for seller
