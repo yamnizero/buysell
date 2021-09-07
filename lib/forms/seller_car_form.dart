@@ -1,3 +1,4 @@
+import 'package:buysell/Widgets/imagePicker_widget.dart';
 import 'package:buysell/provider/cat_provider.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,6 +24,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
   var _fuelController = TextEditingController();
   var _transmissionController = TextEditingController();
   var _kmController = TextEditingController();
+  var _titleController = TextEditingController();
   var _noOfOwnerController = TextEditingController();
   var _descController = TextEditingController();
   var _addressController = TextEditingController();
@@ -279,7 +281,8 @@ class _SellerCarFormState extends State<SellerCarForm> {
                     ),
                   ),
                   TextFormField(
-                    controller: _kmController,
+                    controller: _titleController,
+                    keyboardType: TextInputType.text,
                     maxLength: 50,
                     decoration: InputDecoration(
                       labelText: 'Add title',
@@ -309,6 +312,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
                   SizedBox(height: 10 ,),
                   Divider(color: Colors.grey,),
                   TextFormField(
+                    enabled: false,
                     minLines: 2,
                     maxLines: 4,
                     controller: _addressController,
@@ -324,7 +328,23 @@ class _SellerCarFormState extends State<SellerCarForm> {
                     },
                   ),
                   Divider(color: Colors.grey,),
-                  SizedBox(height: 50,),
+                  //Upload image
+                  InkWell(
+                    onTap: (){
+                      showDialog(context: context, builder: (BuildContext context){
+                        return ImagePickerWidget();
+                      });
+                    },
+                    child: Neumorphic(
+                      child: Container(
+                        height: 40,
+                        child: Center(
+                          child: Text('Upload image'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 80,),
                 ],
               ),
             ),
@@ -341,7 +361,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    "Next",
+                    "Save",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
@@ -361,7 +381,14 @@ class _SellerCarFormState extends State<SellerCarForm> {
   validate() {
     if (_formKey.currentState.validate()) {
       print("validate");
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please complete required fields'),
+        ),
+      );
     }
+
   }
 
   List<String> _fuelList = ['Diesel', 'Petrol', 'Electric',];
