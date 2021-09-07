@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -11,6 +12,7 @@ class ImagePickerWidget extends StatefulWidget {
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   File _image;
+  bool _uploading = false;
   final picker = ImagePicker();
 
   Future getImage() async {
@@ -29,16 +31,32 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   Widget build(BuildContext context) {
 
 
-    Future<void> uploadFile(String filePath) async {
-      File file = File(filePath);
-
+    Future<String> uploadFile() async {
+      //here error
+      File file = File(_image.path);
+      String imageName = 'productImage/${DateTime.now().microsecondsSinceEpoch}';
+      String downloadUrl;
       try {
-        await FirebaseStorage.instance
-            .ref('uploads/file-to-upload.png')
-            .putFile(file);
-      } on firebase_core.FirebaseException catch (e) {
+        await FirebaseStorage.instance.ref(imageName).putFile(file);
+        downloadUrl = await FirebaseStorage.instance
+            .ref(imageName)
+            .getDownloadURL();
+        if(downloadUrl!=null){
+          setState(() {
+            _image=null;
+            print(downloadUrl);
+          });
+        }
+      } on FirebaseException catch (e) {
         // e.g, e.code == 'canceled'
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Cancelled'),
+          ),
+        );
       }
+      return downloadUrl;
+
     }
 
 
@@ -72,6 +90,13 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                         {
                           setState(() {
                             _image=null;
+                            uploadFile().then((url) {
+                              if(url!=null){
+                               setState(() {
+                                 _uploading =false;
+                               });
+                              }
+                            });
                           });
                         },
                       ),
@@ -92,6 +117,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 SizedBox(
                   height: 20,
                 ),
+                if(_image!=null)
                 Row(
                   children: [
                     Expanded(
@@ -99,7 +125,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                         style: NeumorphicStyle(color: Colors.green),
                         onPressed: ()
                         {
-                          //upload file  to firebase storage
+                          setState(() {
+                            _uploading =true;
+
+                          });
                         },
                         child: Text(
                           "save",
@@ -142,6 +171,11 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(height: 20,),
+                if(_uploading)
+                CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
                 )
               ],
             ),
