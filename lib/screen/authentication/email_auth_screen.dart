@@ -119,9 +119,9 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
                   if (value == null || value.isEmpty) {
                     return "Enter email";
                   }
-                  // if(value.isNotEmpty && isValid == false){
-                  //   return "Enter valid email";
-                  // }
+                  if(value.isNotEmpty && isValid == false){
+                    return "Enter valid email";
+                  }
                   return null;
                 },
                 decoration: InputDecoration(

@@ -7,6 +7,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:galleryimage/galleryimage.dart';
 import 'package:provider/provider.dart';
 
+import 'user_review_screen.dart';
+
 class SellerCarForm extends StatefulWidget {
   static const String id = "-car-form";
 
@@ -28,24 +30,25 @@ class _SellerCarFormState extends State<SellerCarForm> {
   var _titleController = TextEditingController();
   var _noOfOwnerController = TextEditingController();
   var _descController = TextEditingController();
-  var _addressController = TextEditingController();
 
 
   //we have maximum data here in this textController , other data provider
 
 
 
-
-
   @override
-  void initState() {
-    _services.getUserData().then((value){
-      setState(() {
-        _addressController.text = value['address'];
-      });
+  void didChangeDependencies() {
+    //to get context u can use didChangeDependencies
+    var _catProvider = Provider.of<CategoryProvider>(context);
+
+    setState(() {
+      _brandController.text = _catProvider.dataToFirebasestore['brand'];
     });
-    super.initState();
+
+    super.didChangeDependencies();
   }
+
+
 
 
 
@@ -290,7 +293,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
                     maxLength: 50,
                     decoration: InputDecoration(
                       labelText: 'Add title',
-                      counterText: 'Mention the key features (e.g brand, model)'
+                      helperText: 'Mention the key features (e.g brand, model)'
                     ),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -302,9 +305,10 @@ class _SellerCarFormState extends State<SellerCarForm> {
                   TextFormField(
                     controller: _descController,
                     maxLength: 4000,
+                    minLines: 1,
                     decoration: InputDecoration(
                       labelText: 'Description',
-                      counterText: 'Include condition, features, reason for selling'
+                        helperText: 'Include condition, features, reason for selling'
                     ),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -315,35 +319,22 @@ class _SellerCarFormState extends State<SellerCarForm> {
                   ),
                   SizedBox(height: 10 ,),
                   Divider(color: Colors.grey,),
-                  TextFormField(
-                    enabled: false,
-                    minLines: 2,
-                    maxLines: 4,
-                    controller: _addressController,
-                    decoration: InputDecoration(
-                        labelText: 'Address',
-                        counterText: 'Seller address'
-                    ),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Please complete required field";
-                      }
-                      return null;
-                    },
-                  ),
-                  Divider(color: Colors.grey,),
                   //Upload image
                   Container(
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       color: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: GalleryImage(
+                    child:_catProvider.urlListImg.length==0 ? Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text("No image selected",textAlign: TextAlign.center,),
+                    ) : GalleryImage(
                       //need a list of images url
                       imageUrls: _catProvider.urlListImg,
                     ),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(height: 20,),
                   InkWell(
                     onTap: (){
                       showDialog(context: context, builder: (BuildContext context){
@@ -351,11 +342,16 @@ class _SellerCarFormState extends State<SellerCarForm> {
                       });
                     },
                     child: Neumorphic(
+                      style: NeumorphicStyle(
+                        border: NeumorphicBorder(
+                          color: Theme.of(context).primaryColor,
+                        )
+                      ),
                       child: Container(
                         height: 40,
                         child: Center(
                           child: Text(
-                           _catProvider.urlListImg.length>0 ? 'Upload images' :'Upload image'
+                           _catProvider.urlListImg.length>0 ? 'Upload more images' :'Upload image'
                           ),
                         ),
                       ),
@@ -415,7 +411,9 @@ class _SellerCarFormState extends State<SellerCarForm> {
           'images' : provider.urlListImg
         });
         //once saved all data to provider , we need to check user contact details again
-        //to confirm all the details  are  there,so we need to go profile screen 
+        //to confirm all the details  are  there,so we need to go profile screen
+        Navigator.pushNamed(context, UserReviewScreen.id);
+        
       }else
         {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -437,5 +435,5 @@ class _SellerCarFormState extends State<SellerCarForm> {
 
   List<String> _fuelList = ['Diesel', 'Petrol', 'Electric',];
   List<String> _transmission = ['Manually','Automatic'];
-  List<String> _noOfOwner = ['1', '2', '3', '4', '4+',];
+  List<String> _noOfOwner = ['1', '2nd', '3rd', '4th', '4th+',];
 }
