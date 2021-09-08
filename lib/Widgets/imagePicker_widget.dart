@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'package:buysell/provider/cat_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:galleryimage/galleryimage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class ImagePickerWidget extends StatefulWidget {
   @override
@@ -30,9 +33,11 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   @override
   Widget build(BuildContext context) {
 
+    var _provider = Provider.of<CategoryProvider>(context);
 
+
+    //image upload to storage
     Future<String> uploadFile() async {
-      //here error
       File file = File(_image.path);
       String imageName = 'productImage/${DateTime.now().microsecondsSinceEpoch}';
       String downloadUrl;
@@ -44,7 +49,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         if(downloadUrl!=null){
           setState(() {
             _image=null;
-            print(downloadUrl);
+           //uploaded provider Url list
+            _provider.getImages(downloadUrl);
           });
         }
       } on FirebaseException catch (e) {
@@ -63,6 +69,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
 
     return Dialog(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           AppBar(
             elevation: 1,
@@ -117,6 +124,21 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 SizedBox(
                   height: 20,
                 ),
+                //if list has data will show this
+                if(_provider.urlListImg.length>0)
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: GalleryImage(
+                    //need a list of images url
+                    imageUrls: _provider.urlListImg,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 if(_image!=null)
                 Row(
                   children: [
@@ -127,7 +149,13 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                         {
                           setState(() {
                             _uploading =true;
-
+                            uploadFile().then((url){
+                              if(url!=null){
+                                setState(() {
+                                  _uploading =false;
+                                });
+                              }
+                            });
                           });
                         },
                         child: Text(
@@ -162,7 +190,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                         style: NeumorphicStyle(
                             color: Theme.of(context).primaryColor),
                         child: Text(
-                          'Upload image',
+                         _provider.urlListImg.length>0 ?'Upload more images' : 'Upload image',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,

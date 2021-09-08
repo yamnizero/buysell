@@ -4,6 +4,7 @@ import 'package:buysell/services/firebase_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:galleryimage/galleryimage.dart';
 import 'package:provider/provider.dart';
 
 class SellerCarForm extends StatefulWidget {
@@ -28,6 +29,9 @@ class _SellerCarFormState extends State<SellerCarForm> {
   var _noOfOwnerController = TextEditingController();
   var _descController = TextEditingController();
   var _addressController = TextEditingController();
+
+
+  //we have maximum data here in this textController , other data provider
 
 
 
@@ -329,6 +333,17 @@ class _SellerCarFormState extends State<SellerCarForm> {
                   ),
                   Divider(color: Colors.grey,),
                   //Upload image
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: GalleryImage(
+                      //need a list of images url
+                      imageUrls: _catProvider.urlListImg,
+                    ),
+                  ),
+                  SizedBox(height: 10,),
                   InkWell(
                     onTap: (){
                       showDialog(context: context, builder: (BuildContext context){
@@ -339,7 +354,9 @@ class _SellerCarFormState extends State<SellerCarForm> {
                       child: Container(
                         height: 40,
                         child: Center(
-                          child: Text('Upload image'),
+                          child: Text(
+                           _catProvider.urlListImg.length>0 ? 'Upload images' :'Upload image'
+                          ),
                         ),
                       ),
                     ),
@@ -368,7 +385,8 @@ class _SellerCarFormState extends State<SellerCarForm> {
                   ),
                 ),
                 onPressed: () {
-                  validate();
+                  validate(_catProvider);
+                  print(_catProvider.dataToFirebasestore);
                 },
               ),
             ),
@@ -378,9 +396,35 @@ class _SellerCarFormState extends State<SellerCarForm> {
     );
   }
 
-  validate() {
+  validate(CategoryProvider provider) {
     if (_formKey.currentState.validate()) {
-      print("validate");
+      if(provider.urlListImg.isNotEmpty){
+        //should have image
+        provider.dataToFirebasestore.addAll({
+          'category' :provider.selectedCategory,
+          'brand' : _brandController.text,
+           'year' : _yearController.text,
+          'price' : _priceController.text,
+          'fuel' : _fuelController.text,
+          'transmission' : _transmissionController.text,
+          'kmDrive' : _kmController.text,
+          'noOfOwners' : _noOfOwnerController.text,
+          'title' : _titleController.text,
+          'description' : _descController.text,
+          'sellerUid': _services.user.uid,
+          'images' : provider.urlListImg
+        });
+        //once saved all data to provider , we need to check user contact details again
+        //to confirm all the details  are  there,so we need to go profile screen 
+      }else
+        {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('image not uploaded'),
+          ),
+        );
+      }
+
     }else{
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
