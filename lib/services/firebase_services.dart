@@ -11,6 +11,7 @@ class FirebaseServices{
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   CollectionReference categories = FirebaseFirestore.instance.collection('categories');
+  CollectionReference products = FirebaseFirestore.instance.collection('products');
 
 
   Future<void> updateUser(Map<String,dynamic>data,context) {
@@ -23,6 +24,7 @@ class FirebaseServices{
         .catchError((error){
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          backgroundColor: Colors.red,
           content: Text('Failed to update location'),
         ),
       );

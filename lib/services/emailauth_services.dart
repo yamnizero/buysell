@@ -71,7 +71,8 @@ class EmailAuthentication {
         return users.doc(userCredential.user.uid).set({
           'uid': userCredential.user.uid,
           'mobile': null,
-          'email': userCredential.user.email
+          'email': userCredential.user.email,
+          'name' : null
         }).then((value) async {
           //will send email verification
           await userCredential.user.sendEmailVerification().then((value) {

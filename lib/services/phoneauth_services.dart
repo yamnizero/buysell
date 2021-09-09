@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:buysell/screen/authentication/otp_screen.dart';
 import 'package:buysell/screen/location_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,9 +25,10 @@ class PhoneAuthServices {
       //does not exists
       return users.doc(user.uid)
           .set({
-        'uid': user.uid, // user id
-        'mobile': user.phoneNumber, // Stokes and Sons
-        'email': user.email // 42
+        'uid': user.uid,
+        'mobile': user.phoneNumber,
+        'email': user.email ,
+        'name' : null
       })
           .then((value) {
         //after add data to firebase then will go to next screen

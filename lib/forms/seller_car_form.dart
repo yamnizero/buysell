@@ -42,7 +42,16 @@ class _SellerCarFormState extends State<SellerCarForm> {
     var _catProvider = Provider.of<CategoryProvider>(context);
 
     setState(() {
-      _brandController.text = _catProvider.dataToFirebasestore['brand'];
+      _brandController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['brand'];
+      _yearController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['year'];
+      _priceController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['price'];
+      _fuelController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['fuel'];
+      _transmissionController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['transmission'];
+      _kmController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['kmDrive'];
+      _noOfOwnerController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['noOfOwners'];
+      _titleController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['title'];
+      _descController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['description'];
+      _descController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['description'];
     });
 
     super.didChangeDependencies();
@@ -398,6 +407,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
         //should have image
         provider.dataToFirebasestore.addAll({
           'category' :provider.selectedCategory,
+          'subCat' :provider.selectedSubCat,
           'brand' : _brandController.text,
            'year' : _yearController.text,
           'price' : _priceController.text,
