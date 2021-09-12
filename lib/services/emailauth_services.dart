@@ -72,7 +72,8 @@ class EmailAuthentication {
           'uid': userCredential.user.uid,
           'mobile': null,
           'email': userCredential.user.email,
-          'name' : null
+          'name' : null,
+          'address' : null,
         }).then((value) async {
           //will send email verification
           await userCredential.user.sendEmailVerification().then((value) {

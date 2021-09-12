@@ -28,7 +28,8 @@ class PhoneAuthServices {
         'uid': user.uid,
         'mobile': user.phoneNumber,
         'email': user.email ,
-        'name' : null
+        'name' : null,
+        'address' : null,
       })
           .then((value) {
         //after add data to firebase then will go to next screen
