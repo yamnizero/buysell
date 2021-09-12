@@ -1,4 +1,5 @@
 import 'package:buysell/provider/cat_provider.dart';
+import 'package:buysell/screen/main_screen.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,7 @@ class UserReviewScreen extends StatefulWidget {
 
 class _UserReviewScreenState extends State<UserReviewScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool _loading =false;
 
   FirebaseServices _services = FirebaseServices();
 
@@ -80,6 +82,90 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
   Widget build(BuildContext context) {
 
     var _provider = Provider.of<CategoryProvider>(context);
+
+
+    showConfirmDialog(){
+      return showDialog(
+          context: context,
+          builder:(BuildContext context){
+            return Dialog(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                  [
+                    Text('Confirm',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                    SizedBox(height: 10,),
+                    Text('Are you sure, you want to save below product?'),
+                    SizedBox(height: 10,),
+                    ListTile(
+                      leading: Image.network(_provider.dataToFirebasestore['images'][0]),
+                      title: Text(_provider.dataToFirebasestore['title'],maxLines: 1,),
+                      subtitle: Text(_provider.dataToFirebasestore['price']),
+                    ),
+                    SizedBox(height:20,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children:
+                      [
+                        Expanded(child: NeumorphicButton(
+                          onPressed: (){
+                            setState(() {
+                              _loading = false;
+                            });
+                            Navigator.pop(context);
+                          },
+                          style: NeumorphicStyle(
+                            border: NeumorphicBorder(color: Theme.of(context).primaryColor),
+                            color: Colors.transparent,
+                          ),
+                          child: Text('Cancel',textAlign: TextAlign.center,),
+                        )),
+                        SizedBox(width: 10,),
+                        Expanded(child: NeumorphicButton(
+                          style: NeumorphicStyle(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          child: Text('Confirm',style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),
+                          onPressed: ()
+                          {
+                            setState(() {
+                              _loading = true;
+                            });
+                            //first need to update user details before saving product data
+                            updateUser(_provider,{
+                              'contactDetails' :{
+                                'name' : _nameController.text,
+                                'contactMobile' : _phoneController.text,
+                                'contactEmail' : _emailController.text,
+                                // //address will update from address screen
+                              }
+
+                            }, context).then((value){
+                              setState(() {
+                                _loading = false;
+                              });
+                              Navigator.pushReplacementNamed(context, MainScreen.id);
+                            });
+                          },
+                        )),
+                      ],
+                    ),
+                    SizedBox(height: 20,),
+                    if(_loading)
+                    Center(child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+                    ))
+                  ],
+                ),
+              ),
+            );
+          }
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -230,16 +316,9 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
                 onPressed: ()
                 {
                   if(_formKey.currentState.validate()){
-                    //first need to update user details before saving product data
-                    updateUser(_provider,{
-                      'contactDetails' :{
-                        'name' : _nameController.text,
-                        'contactMobile' : _phoneController.text,
-                        'contactEmail' : _emailController.text,
-                        // //address will update from address screen
-                      }
 
-                    }, context);
+                    //ask  for confirmation before save
+                  return showConfirmDialog();
                   }
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
