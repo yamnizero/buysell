@@ -143,31 +143,6 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     );
   }
 
-
-
-
- //  //alert dialog
- // showAlertDialog(BuildContext context){
- //    AlertDialog alert = AlertDialog(
- //      content: Row(
- //        children: [
- //          CircularProgressIndicator(
- //            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
- //          ),
- //          SizedBox(width: 8,),
- //          Text("Please wait")
- //        ],
- //      ),
- //    );
- //    showDialog(
- //        barrierDismissible:false ,
- //        context: context, builder: (BuildContext context){
- //      return alert;
- //    });
- // }
-
-
-
   PhoneAuthServices _services = PhoneAuthServices();
 
 }

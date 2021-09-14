@@ -1,3 +1,4 @@
+import 'package:buysell/screen/home_screen.dart';
 import 'package:buysell/screen/location_screen.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -56,7 +57,7 @@ class CustomAppBar extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => LocationScreen(locationChanging: true,),
+                  builder: (BuildContext context) => LocationScreen(popScreen:HomeScreen.id,),
               ),
           );
         },

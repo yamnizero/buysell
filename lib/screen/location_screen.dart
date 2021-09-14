@@ -12,8 +12,8 @@ import 'package:location/location.dart';
 class LocationScreen extends StatefulWidget {
   static const String id = "location-screen";
 
-  final bool locationChanging;
-  const LocationScreen({this.locationChanging});
+  final String popScreen;
+  const LocationScreen({this.popScreen});
 
   @override
   _LocationScreenState createState() => _LocationScreenState();
@@ -75,7 +75,7 @@ class _LocationScreenState extends State<LocationScreen> {
   Widget build(BuildContext context) {
 
     //fetching location from firestore
-    if(widget.locationChanging==null){
+    if(widget.popScreen==null){
 
       _services.users
           .doc(_services.user.uid)
@@ -88,7 +88,7 @@ class _LocationScreenState extends State<LocationScreen> {
               setState(() {
                 _loading =true;
               });
-              Navigator.pushReplacementNamed(context, MainScreen.id);
+             return Navigator.pushReplacementNamed(context, MainScreen.id);
             }
 
           }else{
@@ -185,9 +185,9 @@ class _LocationScreenState extends State<LocationScreen> {
                           _services.updateUser({
                             'location' : GeoPoint(value.latitude, value.longitude),
                             'address' : _address
-                          }, context).then((value){
+                          }, context,widget.popScreen).then((value){
                             progressDialog.dismiss();
-                            Navigator.pushNamed(context, HomeScreen.id);
+                        //return Navigator.pushNamed(context, widget.popScreen);
                           });
                         }
                         });
@@ -249,7 +249,7 @@ class _LocationScreenState extends State<LocationScreen> {
                               'state' : stateValue,
                               'city':cityValue,
                               'country' : countryValue
-                            }, context);
+                            }, context,widget.popScreen);
                           }
                         },
                       ),
@@ -332,7 +332,7 @@ class _LocationScreenState extends State<LocationScreen> {
                               _services.updateUser({
                                 'address' : _address,
                                 'location' : GeoPoint(value.latitude,value.longitude),
-                              }, context).whenComplete(() {
+                              }, context,widget.popScreen).whenComplete(() {
                                 progressDialog.dismiss();
                               });
                             }

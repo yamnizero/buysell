@@ -31,10 +31,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
   var _noOfOwnerController = TextEditingController();
   var _descController = TextEditingController();
 
-
   //we have maximum data here in this textController , other data provider
-
-
 
   @override
   void didChangeDependencies() {
@@ -42,30 +39,44 @@ class _SellerCarFormState extends State<SellerCarForm> {
     var _catProvider = Provider.of<CategoryProvider>(context);
 
     setState(() {
-      _brandController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['brand'];
-      _yearController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['year'];
-      _priceController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['price'];
-      _fuelController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['fuel'];
-      _transmissionController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['transmission'];
-      _kmController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['kmDrive'];
-      _noOfOwnerController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['noOfOwners'];
-      _titleController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['title'];
-      _descController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['description'];
-      _descController.text = _catProvider.dataToFirebasestore.isEmpty ? null : _catProvider.dataToFirebasestore['description'];
+      _brandController.text = _catProvider.dataToFirebasestore.isEmpty
+          ? null
+          : _catProvider.dataToFirebasestore['brand'];
+      _yearController.text = _catProvider.dataToFirebasestore.isEmpty
+          ? null
+          : _catProvider.dataToFirebasestore['year'];
+      _priceController.text = _catProvider.dataToFirebasestore.isEmpty
+          ? null
+          : _catProvider.dataToFirebasestore['price'];
+      _fuelController.text = _catProvider.dataToFirebasestore.isEmpty
+          ? null
+          : _catProvider.dataToFirebasestore['fuel'];
+      _transmissionController.text = _catProvider.dataToFirebasestore.isEmpty
+          ? null
+          : _catProvider.dataToFirebasestore['transmission'];
+      _kmController.text = _catProvider.dataToFirebasestore.isEmpty
+          ? null
+          : _catProvider.dataToFirebasestore['kmDrive'];
+      _noOfOwnerController.text = _catProvider.dataToFirebasestore.isEmpty
+          ? null
+          : _catProvider.dataToFirebasestore['noOfOwners'];
+      _titleController.text = _catProvider.dataToFirebasestore.isEmpty
+          ? null
+          : _catProvider.dataToFirebasestore['title'];
+      _descController.text = _catProvider.dataToFirebasestore.isEmpty
+          ? null
+          : _catProvider.dataToFirebasestore['description'];
+      _descController.text = _catProvider.dataToFirebasestore.isEmpty
+          ? null
+          : _catProvider.dataToFirebasestore['description'];
     });
 
     super.didChangeDependencies();
   }
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     var _catProvider = Provider.of<CategoryProvider>(context);
-
-
 
     Widget _appBar(title, fieldValue) {
       return AppBar(
@@ -73,8 +84,9 @@ class _SellerCarFormState extends State<SellerCarForm> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         automaticallyImplyLeading: false,
-        shape: Border(bottom: BorderSide(color: Colors.grey.shade300),),
-
+        shape: Border(
+          bottom: BorderSide(color: Colors.grey.shade300),
+        ),
         title: Text(
           "$title > $fieldValue",
           style: TextStyle(color: Colors.black, fontSize: 14),
@@ -205,6 +217,10 @@ class _SellerCarFormState extends State<SellerCarForm> {
                       if (value.isEmpty) {
                         return "Please complete required field";
                       }
+                      if(value.length<5){
+                        //price should at least above 10,000
+                        return 'Required minimum price';
+                      }
                       return null;
                     },
                   ),
@@ -278,8 +294,8 @@ class _SellerCarFormState extends State<SellerCarForm> {
                           builder: (BuildContext context) {
                             return _listView(
                                 fieldValue: 'No. of owners',
-                                list:_noOfOwner,
-                                textController:_noOfOwnerController);
+                                list: _noOfOwner,
+                                textController: _noOfOwnerController);
                           });
                     },
                     child: TextFormField(
@@ -301,13 +317,14 @@ class _SellerCarFormState extends State<SellerCarForm> {
                     keyboardType: TextInputType.text,
                     maxLength: 50,
                     decoration: InputDecoration(
-                      labelText: 'Add title',
-                      helperText: 'Mention the key features (e.g brand, model)'
-                    ),
+                        labelText: 'Add title',
+                        helperText:
+                            'Mention the key features (e.g brand, model)'),
                     validator: (value) {
                       if (value.isEmpty) {
                         return "Please complete required field";
                       }
+
                       return null;
                     },
                   ),
@@ -316,18 +333,25 @@ class _SellerCarFormState extends State<SellerCarForm> {
                     maxLength: 4000,
                     minLines: 1,
                     decoration: InputDecoration(
-                      labelText: 'Description',
-                        helperText: 'Include condition, features, reason for selling'
-                    ),
+                        labelText: 'Description',
+                        helperText:
+                            'Include condition, features, reason for selling'),
                     validator: (value) {
                       if (value.isEmpty) {
                         return "Please complete required field";
                       }
+                      if(value.length<30){
+                        return 'need at least 30 characters';
+                      }
                       return null;
                     },
                   ),
-                  SizedBox(height: 10 ,),
-                  Divider(color: Colors.grey,),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                  ),
                   //Upload image
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -335,38 +359,48 @@ class _SellerCarFormState extends State<SellerCarForm> {
                       color: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child:_catProvider.urlListImg.length==0 ? Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text("No image selected",textAlign: TextAlign.center,),
-                    ) : GalleryImage(
-                      //need a list of images url
-                      imageUrls: _catProvider.urlListImg,
-                    ),
+                    child: _catProvider.urlListImg.length == 0
+                        ? Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              "No image selected",
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                        : GalleryImage(
+                            //need a list of images url
+                            imageUrls: _catProvider.urlListImg,
+                          ),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   InkWell(
-                    onTap: (){
-                      showDialog(context: context, builder: (BuildContext context){
-                        return ImagePickerWidget();
-                      });
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return ImagePickerWidget();
+                          });
                     },
                     child: Neumorphic(
                       style: NeumorphicStyle(
-                        border: NeumorphicBorder(
-                          color: Theme.of(context).primaryColor,
-                        )
-                      ),
+                          border: NeumorphicBorder(
+                        color: Theme.of(context).primaryColor,
+                      )),
                       child: Container(
                         height: 40,
                         child: Center(
-                          child: Text(
-                           _catProvider.urlListImg.length>0 ? 'Upload more images' :'Upload image'
-                          ),
+                          child: Text(_catProvider.urlListImg.length > 0
+                              ? 'Upload more images'
+                              : 'Upload image'),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 80,),
+                  SizedBox(
+                    height: 80,
+                  ),
                 ],
               ),
             ),
@@ -403,47 +437,55 @@ class _SellerCarFormState extends State<SellerCarForm> {
 
   validate(CategoryProvider provider) {
     if (_formKey.currentState.validate()) {
-      if(provider.urlListImg.isNotEmpty){
+      if (provider.urlListImg.isNotEmpty) {
         //should have image
         provider.dataToFirebasestore.addAll({
-          'category' :provider.selectedCategory,
-          'subCat' :provider.selectedSubCat,
-          'brand' : _brandController.text,
-           'year' : _yearController.text,
-          'price' : _priceController.text,
-          'fuel' : _fuelController.text,
-          'transmission' : _transmissionController.text,
-          'kmDrive' : _kmController.text,
-          'noOfOwners' : _noOfOwnerController.text,
-          'title' : _titleController.text,
-          'description' : _descController.text,
+          'category': provider.selectedCategory,
+          'subCat': provider.selectedSubCat,
+          'brand': _brandController.text,
+          'year': _yearController.text,
+          'price': _priceController.text,
+          'fuel': _fuelController.text,
+          'transmission': _transmissionController.text,
+          'kmDrive': _kmController.text,
+          'noOfOwners': _noOfOwnerController.text,
+          'title': _titleController.text,
+          'description': _descController.text,
           'sellerUid': _services.user.uid,
-          'images' : provider.urlListImg
+          'images': provider.urlListImg
         });
         //once saved all data to provider , we need to check user contact details again
         //to confirm all the details  are  there,so we need to go profile screen
         Navigator.pushNamed(context, UserReviewScreen.id);
-        
-      }else
-        {
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
+            backgroundColor: Colors.red,
             content: Text('image not uploaded'),
           ),
         );
       }
-
-    }else{
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
+          backgroundColor: Colors.red,
           content: Text('Please complete required fields'),
         ),
       );
     }
-
   }
 
-  List<String> _fuelList = ['Diesel', 'Petrol', 'Electric',];
-  List<String> _transmission = ['Manually','Automatic'];
-  List<String> _noOfOwner = ['1', '2nd', '3rd', '4th', '4th+',];
+  List<String> _fuelList = [
+    'Diesel',
+    'Petrol',
+    'Electric',
+  ];
+  List<String> _transmission = ['Manually', 'Automatic'];
+  List<String> _noOfOwner = [
+    '1',
+    '2nd',
+    '3rd',
+    '4th',
+    '4th+',
+  ];
 }

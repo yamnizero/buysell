@@ -41,12 +41,14 @@ class GoogleAuthentication{
         if(e.code == "account-exists-with-different-credential"){
          ScaffoldMessenger.of(context).showSnackBar(
            customSnackBar(
+
                content: "account-exists-with-different-credential"
            )
          );
         }else if(e.code == "invalid-credential"){
           ScaffoldMessenger.of(context).showSnackBar(
               customSnackBar(
+
                   content:"invalid-credential"
               )
           );
