@@ -1,6 +1,9 @@
+import 'package:buysell/forms/forms.dart';
+import 'package:buysell/provider/cat_provider.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SellerSubCatList extends StatelessWidget {
 
@@ -11,6 +14,7 @@ class SellerSubCatList extends StatelessWidget {
 
     FirebaseServices _services = FirebaseServices();
     DocumentSnapshot args = ModalRoute.of(context).settings.arguments;
+    var _catProvider = Provider.of<CategoryProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,11 +47,16 @@ class SellerSubCatList extends StatelessWidget {
                 itemCount: data.length,
                 itemBuilder: (BuildContext context, int index) {
 
+
+
                   return Padding(
                     padding: const EdgeInsets.only(left: 8,right: 8 ),
                     child: ListTile(
                       onTap: ()
                       {
+                        //here will open next form to sell
+                        _catProvider.getSubCategory(data[index]);
+                        Navigator.pushNamed(context, FormsScreen.id);
                       },
                       title: Text(data[index],style: TextStyle(fontSize: 15),),
 

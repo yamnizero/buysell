@@ -54,4 +54,10 @@ class CategoryProvider with ChangeNotifier {
     });
   }
 
+  clearData(){
+    this.urlListImg =[];
+    dataToFirebasestore = {};
+  notifyListeners();
+  }
+
 }

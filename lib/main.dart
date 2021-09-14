@@ -10,6 +10,7 @@ import 'package:buysell/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'forms/forms.dart';
 import 'forms/seller_car_form.dart';
 import 'forms/user_review_screen.dart';
 import 'screen/account_screen.dart';
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
         SellerSubCatList.id: (context) => SellerSubCatList(),
         SellerCarForm.id: (context) => SellerCarForm(),
         UserReviewScreen.id: (context) => UserReviewScreen(),
+        FormsScreen.id: (context) => FormsScreen(),
       },
     );
 

@@ -52,13 +52,18 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
 
   Future<void> saveProductsToDb(CategoryProvider provider,context) {
     return _services.products
-        .doc(_services.user.uid)
-        .set(
-         provider.dataToFirebasestore
-    )
+        .add(provider.dataToFirebasestore)
         .then((value) {
-          //data updated
-    },)
+          //need to clear all the save data from mobile
+          provider.clearData();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('We have received your products and will be notified you once get approved'),
+            ),
+          );
+          Navigator.pushReplacementNamed(context, MainScreen.id);
+    },
+    )
         .catchError((error){
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -122,21 +127,19 @@ class _UserReviewScreenState extends State<UserReviewScreen> {
                           child: Text('Confirm',style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),
                           onPressed: ()
                           {
-
-                            //first need to update user details before saving product data
                             updateUser(_provider,{
                               'contactDetails' :{
-                                'name' : _nameController.text,
                                 'contactMobile' : _phoneController.text,
                                 'contactEmail' : _emailController.text,
                                 // //address will update from address screen
-                              }
+                              },
+                              'name' : _nameController.text,
 
                             }, context).then((value){
                               setState(() {
                                 _loading = false;
                               });
-                              Navigator.pushReplacementNamed(context, MainScreen.id);
+
                             });
                           },
                         )),
