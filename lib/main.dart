@@ -10,7 +10,7 @@ import 'package:buysell/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'forms/forms.dart';
+import 'forms/forms_screen.dart';
 import 'forms/seller_car_form.dart';
 import 'forms/user_review_screen.dart';
 import 'screen/account_screen.dart';
@@ -27,16 +27,12 @@ void main() async {
   await Firebase.initializeApp();
   Provider.debugCheckInvalidValueType = null;
 
-  runApp(
-
-    MultiProvider(providers:
-    [
-      Provider (create: (_) => CategoryProvider()),
-
+  runApp(MultiProvider(
+    providers: [
+      Provider(create: (_) => CategoryProvider()),
     ],
-      child: MyApp(),));
-
-
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

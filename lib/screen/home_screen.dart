@@ -4,27 +4,21 @@ import 'package:buysell/Widgets/custom_appBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 class HomeScreen extends StatefulWidget {
   static const String id = "home-screen";
-
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  String address ="sudan";
-
-
+  String address = "sudan";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(56),
+          preferredSize: Size.fromHeight(56),
           child: SafeArea(child: CustomAppBar())),
       body: Column(
         children: [
@@ -42,17 +36,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             prefixIcon: Icon(Icons.search),
                             labelText: "Find Card, Mobile and many more",
                             labelStyle: TextStyle(fontSize: 12),
-                            contentPadding: EdgeInsets.only(left: 10,right: 10),
+                            contentPadding:
+                                EdgeInsets.only(left: 10, right: 10),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(6),
-                            )
-                        ),
+                            )),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Icon(Icons.notifications_none),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                 ],
               ),
             ),
@@ -62,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 //banner
-                 BannerWidget(),
+                BannerWidget(),
                 //category
                 CategoryWidget(),
               ],
@@ -72,15 +70,5 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 }
 
-//category
-//car
-//job
-//properties
-//mobile
-//furniture
-//commercial vehicles
-//sports
-//service

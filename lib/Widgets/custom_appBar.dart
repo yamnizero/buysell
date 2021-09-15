@@ -21,7 +21,6 @@ class CustomAppBar extends StatelessWidget {
         if (!snapshot.hasData==null && !snapshot.data.exists) {
           return Text("Address not selected  ");
         }
-
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data.data();
 
@@ -41,7 +40,6 @@ class CustomAppBar extends StatelessWidget {
             return appBar(data['address'], context);
           }
         }
-
         return appBar("Fetching location", context);
       },
     );

@@ -49,13 +49,16 @@ class BannerWidget extends StatelessWidget {
                               repeatForever: true,
                               isRepeatingAnimation: true,
                               animatedTexts: [
-                                FadeAnimatedText('Reach 10 Lakh+\nInterested Buyers',
-                                duration: Duration(seconds: 4),
-                                ),
-                                FadeAnimatedText('New way to\nBuy or sell Cars',
+                                FadeAnimatedText(
+                                  'Reach 10 Lakh+\nInterested Buyers',
                                   duration: Duration(seconds: 4),
                                 ),
-                                FadeAnimatedText('Over 1 Lakh\nCars to Buy',
+                                FadeAnimatedText(
+                                  'New way to\nBuy or sell Cars',
+                                  duration: Duration(seconds: 4),
+                                ),
+                                FadeAnimatedText(
+                                  'Over 1 Lakh\nCars to Buy',
                                   duration: Duration(seconds: 4),
                                 ),
                               ],
@@ -71,10 +74,9 @@ class BannerWidget extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Image.network('https://firebasestorage.googleapis.com/v0/b/buyorsell-61cca.appspot.com/o/banner%2Ficons8-carpool-100.png?alt=media&token=183ee275-902a-4a4b-b192-b4079396de3b'),
+                        child: Image.network(
+                            'https://firebasestorage.googleapis.com/v0/b/buyorsell-61cca.appspot.com/o/banner%2Ficons8-carpool-100.png?alt=media&token=183ee275-902a-4a4b-b192-b4079396de3b'),
                       ),
-
-
                     )
                   ],
                 ),
@@ -82,17 +84,29 @@ class BannerWidget extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(child: NeumorphicButton(
-                    onPressed: (){},
-                    style: NeumorphicStyle(color: Colors.white),
-                    child: Text("Buy Car",textAlign: TextAlign.center,),
-                  ),),
-                  SizedBox(width: 20,),
-                  Expanded(child: NeumorphicButton(
-                    onPressed: (){},
-                    style: NeumorphicStyle(color: Colors.white),
-                    child: Text("Sell Car",textAlign: TextAlign.center,),
-                  ),),
+                  Expanded(
+                    child: NeumorphicButton(
+                      onPressed: () {},
+                      style: NeumorphicStyle(color: Colors.white),
+                      child: Text(
+                        "Buy Car",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: NeumorphicButton(
+                      onPressed: () {},
+                      style: NeumorphicStyle(color: Colors.white),
+                      child: Text(
+                        "Sell Car",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],

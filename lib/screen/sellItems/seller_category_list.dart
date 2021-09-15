@@ -62,8 +62,6 @@ class SellerCategory extends StatelessWidget {
                         _catProvider.getCatSnapshot(doc);
                         if (doc['subCat'] == null) {
                           //here now  need  to sue provider
-
-
                           return Navigator.pushNamed(context, SellerCarForm.id);
                         }
                         Navigator.pushNamed(context, SellerSubCatList.id,

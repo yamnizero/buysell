@@ -347,7 +347,7 @@ class _SellerCarFormState extends State<SellerCarForm> {
                     },
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 20,
                   ),
                   Divider(
                     color: Colors.grey,
@@ -452,7 +452,8 @@ class _SellerCarFormState extends State<SellerCarForm> {
           'title': _titleController.text,
           'description': _descController.text,
           'sellerUid': _services.user.uid,
-          'images': provider.urlListImg
+          'images': provider.urlListImg,
+          'postedAt' : DateTime.now().microsecondsSinceEpoch
         });
         //once saved all data to provider , we need to check user contact details again
         //to confirm all the details  are  there,so we need to go profile screen

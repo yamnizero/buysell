@@ -13,6 +13,7 @@ class LocationScreen extends StatefulWidget {
   static const String id = "location-screen";
 
   final String popScreen;
+
   const LocationScreen({this.popScreen});
 
   @override
@@ -20,7 +21,6 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-
   FirebaseServices _services = FirebaseServices();
 
   bool _loading = true;
@@ -50,17 +50,17 @@ class _LocationScreenState extends State<LocationScreen> {
 
     _locationData = await location.getLocation();
 
-
     //From coordinates
-    final coordinates = new Coordinates(_locationData.latitude,_locationData.longitude);
-   var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-   var first = addresses.first;
+    final coordinates =
+        new Coordinates(_locationData.latitude, _locationData.longitude);
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var first = addresses.first;
 
-   setState(() {
-     _address = first.addressLine;
-     countryValue =first.countryName;
-
-   });
+    setState(() {
+      _address = first.addressLine;
+      countryValue = first.countryName;
+    });
 
     return _locationData;
   }
@@ -73,37 +73,33 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     //fetching location from firestore
-    if(widget.popScreen==null){
-
+    if (widget.popScreen == null) {
       _services.users
           .doc(_services.user.uid)
           .get()
           .then((DocumentSnapshot document) {
-        if(document.exists){
-          if(document['address']!=null){
+        if (document.exists) {
+          if (document['address'] != null) {
             //mean location had already Update
-            if(mounted){
+            if (mounted) {
               setState(() {
-                _loading =true;
+                _loading = true;
               });
-             return Navigator.pushReplacementNamed(context, MainScreen.id);
+              return Navigator.pushReplacementNamed(context, MainScreen.id);
             }
-
-          }else{
+          } else {
             setState(() {
               _loading = false;
             });
           }
         }
       });
-    }else{
-     setState(() {
-       _loading= false;
-     });
+    } else {
+      setState(() {
+        _loading = false;
+      });
     }
-
 
     //Create an instance of ProgressDialog
     ProgressDialog progressDialog = ProgressDialog(
@@ -116,14 +112,12 @@ class _LocationScreenState extends State<LocationScreen> {
 
     //ShowBottom
     showBottomScreen(context) {
-
-      getLocation().then((location){
-
-        if(location!=null){
+      getLocation().then((location) {
+        if (location != null) {
           //only after fetch location only bottom screen will open
           progressDialog.dismiss();
           showModalBottomSheet(
-            //need to make it full screen
+              //need to make it full screen
               isScrollControlled: true,
               enableDrag: true,
               context: context,
@@ -176,20 +170,20 @@ class _LocationScreenState extends State<LocationScreen> {
                       ),
                     ),
                     ListTile(
-                      onTap: ()
-                      {
-                       // save address to firestore
+                      onTap: () {
+                        // save address to firestore
                         progressDialog.show();
                         getLocation().then((value) {
-                        if(value!=null){
-                          _services.updateUser({
-                            'location' : GeoPoint(value.latitude, value.longitude),
-                            'address' : _address
-                          }, context,widget.popScreen).then((value){
-                            progressDialog.dismiss();
-                        //return Navigator.pushNamed(context, widget.popScreen);
-                          });
-                        }
+                          if (value != null) {
+                            _services.updateUser({
+                              'location':
+                                  GeoPoint(value.latitude, value.longitude),
+                              'address': _address
+                            }, context, widget.popScreen).then((value) {
+                              progressDialog.dismiss();
+                              //return Navigator.pushNamed(context, widget.popScreen);
+                            });
+                          }
                         });
                       },
                       horizontalTitleGap: 0.0,
@@ -211,158 +205,175 @@ class _LocationScreenState extends State<LocationScreen> {
                       width: MediaQuery.of(context).size.width,
                       color: Colors.grey.shade300,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 14,bottom: 4,top: 4),
+                        padding:
+                            const EdgeInsets.only(left: 14, bottom: 4, top: 4),
                         child: Text(
                           "CHOOSE CITY",
-                          style: TextStyle(color: Colors.blueGrey.shade900,fontSize: 12),
+                          style: TextStyle(
+                              color: Colors.blueGrey.shade900, fontSize: 12),
                         ),
                       ),
                     ),
                     //use a package to select Country  , state and city => csc_picker
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(10,0,10,0),
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: CSCPicker(
                         layout: Layout.vertical,
                         flagState: CountryFlag.DISABLE,
-                        dropdownDecoration: BoxDecoration(shape: BoxShape.rectangle),
+                        dropdownDecoration:
+                            BoxDecoration(shape: BoxShape.rectangle),
                         defaultCountry: DefaultCountry.Sudan,
                         onCountryChanged: (value) {
                           setState(() {
                             countryValue = value;
                           });
                         },
-                        onStateChanged:(value) {
+                        onStateChanged: (value) {
                           setState(() {
                             stateValue = value;
                           });
                         },
-                        onCityChanged:(value) {
-                           setState(() {
-                             cityValue = value;
-                             manualAddress = '$cityValue, $stateValue, $countryValue';
-                           });
-                           //send this address to firestore too
-                          if(value!=null){
+                        onCityChanged: (value) {
+                          setState(() {
+                            cityValue = value;
+                            manualAddress =
+                                '$cityValue, $stateValue, $countryValue';
+                          });
+                          //send this address to firestore too
+                          if (value != null) {
                             _services.updateUser({
                               //add data
-                              'address' : manualAddress,
-                              'state' : stateValue,
-                              'city':cityValue,
-                              'country' : countryValue
-                            }, context,widget.popScreen);
+                              'address': manualAddress,
+                              'state': stateValue,
+                              'city': cityValue,
+                              'country': countryValue
+                            }, context, widget.popScreen);
                           }
                         },
                       ),
                     ),
-
                   ],
                 );
               });
-        }else{
+        } else {
           progressDialog.dismiss();
         }
       });
     }
 
-
-
-
     return Scaffold(
       backgroundColor: Colors.white,
-
       resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          Image.asset("assets/images/location.jpg"),
-          SizedBox(
-            height: 50,
-          ),
-          Text(
-            "Where do  want\nto buy/sell products",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            "To enjoy all that we have to offer you\nwe need to know where to look for them",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          _loading ? Column(
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 8,),
-              Text("Finding location...")
-            ],
-          ) :
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _loading
-                          ? Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor),
-                          ))
-                          : ElevatedButton.icon(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Theme.of(context).primaryColor)),
-                        icon: Icon(CupertinoIcons.location_fill),
-                        label: Padding(
-                          padding: const EdgeInsets.only(top: 15, bottom: 15),
-                          child: Text(
-                            "Around me",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+      body: Center(
+        child: Column(
+          children: [
+            Image.asset("assets/images/location.jpg"),
+            SizedBox(
+              height: 50,
+            ),
+            Text(
+              "Where do  want\nto buy/sell products",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              "To enjoy all that we have to offer you\nwe need to know where to look for them",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            _loading
+                ? Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Text("Finding location...")
+                    ],
+                  )
+                : Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 20, bottom: 10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: _loading
+                                  ? Center(
+                                      child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Theme.of(context).primaryColor),
+                                    ))
+                                  : ElevatedButton.icon(
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all<Color>(
+                                                  Theme.of(context)
+                                                      .primaryColor)),
+                                      icon: Icon(CupertinoIcons.location_fill),
+                                      label: Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 15, bottom: 15),
+                                        child: Text(
+                                          "Around me",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        progressDialog.show();
+                                        getLocation().then((value) {
+                                          if (value != null) {
+                                            _services.updateUser(
+                                                {
+                                                  'address': _address,
+                                                  'location': GeoPoint(
+                                                      value.latitude,
+                                                      value.longitude),
+                                                },
+                                                context,
+                                                widget
+                                                    .popScreen).whenComplete(
+                                                () {
+                                              progressDialog.dismiss();
+                                            });
+                                          }
+                                        });
+                                      },
+                                    ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          progressDialog.show();
+                          showBottomScreen(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(width: 2))),
+                            child: Text(
+                              "Set location manually",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
                           ),
                         ),
-                        onPressed: () {
-                          progressDialog.show();
-                          getLocation().then((value) {
-                            if (value != null) {
-                              _services.updateUser({
-                                'address' : _address,
-                                'location' : GeoPoint(value.latitude,value.longitude),
-                              }, context,widget.popScreen).whenComplete(() {
-                                progressDialog.dismiss();
-                              });
-                            }
-                          });
-                        },
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  progressDialog.show();
-                  showBottomScreen(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration:
-                    BoxDecoration(border: Border(bottom: BorderSide(width: 2))),
-                    child: Text(
-                      "Set location manually",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
+                    ],
                   ),
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
