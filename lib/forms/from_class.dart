@@ -14,6 +14,25 @@ class FormClass {
     'Other Tablets'
   ];
 
+  List apartmentType = [
+    'Apartments',
+    'Farm Houses',
+    'Houses & Villas',
+  ];
+
+  List furnishing = [
+    'Furnished',
+    'Semi-Furnished'
+  ];
+
+  List consStatus = [
+    'New Launch',
+    'Ready to Move',
+    'Under Construction',
+  ];
+
+
+  List number = ['1','2','3','4','4+'];
 
   Widget appBar(CategoryProvider _provider){
     return AppBar(
