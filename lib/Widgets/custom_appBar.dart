@@ -88,6 +88,42 @@ class CustomAppBar extends StatelessWidget {
           ),
         ),
       ),
+      bottom:  PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: TextField(
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.search),
+                          labelText: "Find Card, Mobile and many more",
+                          labelStyle: TextStyle(fontSize: 12),
+                          contentPadding:
+                          EdgeInsets.only(left: 10, right: 10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          )),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Icon(Icons.notifications_none),
+                SizedBox(
+                  width: 10,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
