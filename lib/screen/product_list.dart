@@ -1,3 +1,4 @@
+import 'package:buysell/Widgets/product_card.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +26,7 @@ class ProductList extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
         child: FutureBuilder<QuerySnapshot>(
-          future: _services.products.get(),
+          future: _services.products.orderBy('postedAt').get(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -61,7 +62,7 @@ class ProductList extends StatelessWidget {
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200,
                       crossAxisSpacing: 8,
-                      childAspectRatio: 2 / 2.8,
+                      childAspectRatio: 2 / 2.6,
                       mainAxisSpacing: 10,
                     ),
                     itemCount: snapshot.data.size,
@@ -72,38 +73,7 @@ class ProductList extends StatelessWidget {
                       String _formattedPrice = '\$ ${_format.format(_price)}';
 
 
-                      return Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 120,
-                                child: Center(
-                                  child: Image.network(data['images'][0]),
-                                ),
-                              ),
-                              SizedBox(height: 10,),
-                              Text(
-                                data['title'],
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(_formattedPrice,style: TextStyle(fontWeight: FontWeight.bold),),
-
-                              data['category'] == 'Cars' ? Text('${data['year']} - ${_kmFormatted(data['kmDrive'])} km') : Text('')
-                            ],
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(.8),
-                            ),
-                            borderRadius: BorderRadius.circular(4)),
-                      );
+                      return ProductCard(data: data, formattedPrice: _formattedPrice);
                     }),
               ],
             );
@@ -113,3 +83,5 @@ class ProductList extends StatelessWidget {
     );
   }
 }
+
+
