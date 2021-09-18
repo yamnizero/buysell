@@ -1,4 +1,5 @@
 import 'package:buysell/provider/cat_provider.dart';
+import 'package:buysell/provider/product_provider.dart';
 import 'package:buysell/screen/authentication/phoneauth_screen.dart';
 import 'package:buysell/screen/categories/category_list.dart';
 import 'package:buysell/screen/categories/subCategories_screen.dart';
@@ -20,6 +21,7 @@ import 'screen/authentication/reset_password_screen.dart';
 import 'screen/chat_screen.dart';
 import 'screen/main_screen.dart';
 import 'screen/myAd_screen.dart';
+import 'screen/product_details_screen.dart';
 import 'screen/sellItems/seller_subCat.dart';
 
 void main() async {
@@ -30,6 +32,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       Provider(create: (_) => CategoryProvider()),
+      Provider(create: (_) => ProductProvider()),
     ],
     child: MyApp(),
   ));
@@ -65,6 +68,7 @@ class MyApp extends StatelessWidget {
         SellerCarForm.id: (context) => SellerCarForm(),
         UserReviewScreen.id: (context) => UserReviewScreen(),
         FormsScreen.id: (context) => FormsScreen(),
+        ProductDetailsScreen.id: (context) => ProductDetailsScreen(),
       },
     );
 
