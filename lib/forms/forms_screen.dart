@@ -173,7 +173,10 @@ class _FormsScreenState extends State<FormsScreen> {
                     ),
                   ),
                 ),
-                if(_provider.selectedSubCat == 'Accessories' || _provider.selectedSubCat == 'Tablets' || _provider.selectedSubCat == 'sell : House & Apartments' ||  _provider.selectedSubCat == 'Rent :House & Apartments')
+                if(_provider.selectedSubCat == 'Accessories' ||
+                    _provider.selectedSubCat == 'Tablets' ||
+                    _provider.selectedSubCat == 'sell : House & Apartments' ||
+                    _provider.selectedSubCat == 'Rent :House & Apartments')
                   InkWell(
                   onTap: ()
                   {

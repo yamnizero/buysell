@@ -28,6 +28,7 @@ class _ProductCardState extends State<ProductCard> {
   final _format = NumberFormat('##,##,##0');
 
   String address = '';
+  DocumentSnapshot sellerDetails;
 
   String _kmFormatted(km){
     var _km =int.parse(km);
@@ -40,6 +41,7 @@ class _ProductCardState extends State<ProductCard> {
      if(mounted){
        setState(() {
          address = value['address'];
+         sellerDetails = value;
        });
      }
     });
@@ -53,6 +55,7 @@ class _ProductCardState extends State<ProductCard> {
     return InkWell(
       onTap: (){
        _provider.getProductDetails(widget.data);
+       _provider.getSellerDetails(sellerDetails);
         Navigator.pushNamed(context, ProductDetailsScreen.id);
       },
       child: Container(

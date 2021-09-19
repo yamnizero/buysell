@@ -6,9 +6,17 @@ import 'package:provider/provider.dart';
 
 class ProductProvider with ChangeNotifier{
   DocumentSnapshot productData;
+  DocumentSnapshot sellerDetails;
+
 
   getProductDetails(details){
     this.productData = details;
     notifyListeners();
   }
+
+  getSellerDetails(details){
+     this.sellerDetails = details;
+     notifyListeners();
+  }
+
 }
