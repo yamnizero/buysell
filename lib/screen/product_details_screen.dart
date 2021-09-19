@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:buysell/provider/cat_provider.dart';
 import 'package:buysell/provider/product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:like_button/like_button.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
@@ -80,211 +80,324 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 12,right: 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 300,
-                color: Colors.grey.shade300,
-                child: _loading
-                    ? Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  Theme.of(context).primaryColor),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text('Loading your Ad')
-                          ],
-                        ),
-                      )
-                    : Stack(
-                        children: [
-                          Center(
-                            child: PhotoView(
-                              backgroundDecoration:
-                                  BoxDecoration(color: Colors.grey.shade300),
-                              imageProvider: NetworkImage(data['images'][_index]),
-                            ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 300,
+                  color: Colors.grey.shade300,
+                  child: _loading
+                      ? Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Theme.of(context).primaryColor),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text('Loading your Ad')
+                            ],
                           ),
-                          Positioned(
-                            bottom: 0.0,
-                            child: Container(
-                              height: 50,
-                              width: MediaQuery.of(context).size.width,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: data['images'].length,
-                                itemBuilder: (BuildContext context, int i) {
-                                  return InkWell(
-                                    onTap: ()
-                                    {
-                                      setState(() {
-                                        _index = i;
-                                      });
-                                    },
-                                    child: Container(
-                                      height: 60,
-                                      width: 60,
-                                      child: Image.network(data['images'][i]),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
+                        )
+                      : Stack(
+                          children: [
+                            Center(
+                              child: PhotoView(
+                                backgroundDecoration:
+                                    BoxDecoration(color: Colors.grey.shade300),
+                                imageProvider: NetworkImage(data['images'][_index]),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-              ),
-            _loading
-                ? Container()
-                 :Container(
-               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [
-                   Row(
-                     children: [
-                       Text(data['title'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold),),
-                       if(data['category']=='Cars')
-                         Text('(${(data['year'])})'),
-                     ],
-                   ),
-                   SizedBox(height:30,),
-                   Text('\$ $price',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20 ),),
-                   SizedBox(height:10,),
-                   if(data['category']=='Cars')
-                     Container(
-                       color: Colors.grey.shade300,
-                       child: Padding(
-                         padding: const EdgeInsets.only(top: 10,bottom: 10),
-                         child: Column(
-                           children: [
-                             Row(
-                               mainAxisAlignment: MainAxisAlignment.spaceAround,
-                               children: [
-                                 Row(
-                                   mainAxisSize: MainAxisSize.min,
-                                   children: [
-                                     Icon(Icons.filter_alt_outlined,size: 12,),
-                                     SizedBox(width: 10,),
-                                     Text(data['fuel'],style: TextStyle(fontSize: 12),),
-                                   ],
-                                 ),
-                                 Row(
-                                   mainAxisSize: MainAxisSize.min,
-                                   children: [
-                                     Icon(Icons.av_timer_outlined ,size: 12,),
-                                     SizedBox(width: 10,),
-                                     Text(_format.format(int.parse(data['kmDrive'])),style: TextStyle(fontSize: 12),),
-                                   ],
-                                 ),
-
-                                 Row(
-                                   mainAxisSize: MainAxisSize.min,
-                                   children: [
-                                     Icon(Icons.account_tree_outlined ,size: 12,),
-                                     SizedBox(width: 10,),
-                                     Text(data['transmission'],style: TextStyle(fontSize: 12),),
-                                   ],
-                                 ),
-                               ],
-                             ),
-                             Divider(color: Colors.grey,),
-                             Padding(
-                               padding: const EdgeInsets.only(left: 12,right: 12 ),
-                               child: Row(
+                            Positioned(
+                              bottom: 0.0,
+                              child: Container(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: data['images'].length,
+                                  itemBuilder: (BuildContext context, int i) {
+                                    return InkWell(
+                                      onTap: ()
+                                      {
+                                        setState(() {
+                                          _index = i;
+                                        });
+                                      },
+                                      child: Container(
+                                        height: 60,
+                                        width: 60,
+                                        child: Image.network(data['images'][i]),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Theme.of(context).primaryColor,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+              _loading
+                  ? Container()
+                   :Container(
+                 child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
+                     Row(
+                       children: [
+                         Text(data['title'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold),),
+                         if(data['category']=='Cars')
+                           Text('(${(data['year'])})'),
+                       ],
+                     ),
+                     SizedBox(height:30,),
+                     Text('\$ $price',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20 ),),
+                     SizedBox(height:10,),
+                     if(data['category']=='Cars')
+                       Container(
+                         color: Colors.grey.shade300,
+                         child: Padding(
+                           padding: const EdgeInsets.only(top: 10,bottom: 10),
+                           child: Column(
+                             children: [
+                               Row(
                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                  children: [
                                    Row(
                                      mainAxisSize: MainAxisSize.min,
                                      children: [
-                                       Icon(CupertinoIcons.person,size: 12,),
+                                       Icon(Icons.filter_alt_outlined,size: 12,),
                                        SizedBox(width: 10,),
-                                       Text(data['noOfOwners'],style: TextStyle(fontSize: 12),),
+                                       Text(data['fuel'],style: TextStyle(fontSize: 12),),
                                      ],
                                    ),
-                                   SizedBox(width: 20,),
-                                   Expanded(
-                                     child: Container(
-                                       child: AbsorbPointer(
-                                         //disable button
-                                         absorbing: true,
-                                         child: TextButton.icon(
-                                             onPressed: () {},
-                                           style: ButtonStyle(alignment: Alignment.center),
-                                             icon: Icon(Icons.location_on_outlined,size: 12,color: Colors.black,),
-                                           //need to bring address here
-                                             label: Flexible(
-                                               child: Text(_productProvider.sellerDetails == null ? '' : _productProvider.sellerDetails['address'],
-                                               maxLines: 1,
-                                                 style: TextStyle(color: Colors.black),
+                                   Row(
+                                     mainAxisSize: MainAxisSize.min,
+                                     children: [
+                                       Icon(Icons.av_timer_outlined ,size: 12,),
+                                       SizedBox(width: 10,),
+                                       Text(_format.format(int.parse(data['kmDrive'])),style: TextStyle(fontSize: 12),),
+                                     ],
+                                   ),
+
+                                   Row(
+                                     mainAxisSize: MainAxisSize.min,
+                                     children: [
+                                       Icon(Icons.account_tree_outlined ,size: 12,),
+                                       SizedBox(width: 10,),
+                                       Text(data['transmission'],style: TextStyle(fontSize: 12),),
+                                     ],
+                                   ),
+                                 ],
+                               ),
+                               Divider(color: Colors.grey,),
+                               Padding(
+                                 padding: const EdgeInsets.only(left: 12,right: 12 ),
+                                 child: Row(
+                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                   children: [
+                                     Row(
+                                       mainAxisSize: MainAxisSize.min,
+                                       children: [
+                                         Icon(CupertinoIcons.person,size: 12,),
+                                         SizedBox(width: 10,),
+                                         Text(data['noOfOwners'],style: TextStyle(fontSize: 12),),
+                                       ],
+                                     ),
+                                     SizedBox(width: 20,),
+                                     Expanded(
+                                       child: Container(
+                                         child: AbsorbPointer(
+                                           //disable button
+                                           absorbing: true,
+                                           child: TextButton.icon(
+                                               onPressed: () {},
+                                             style: ButtonStyle(alignment: Alignment.center),
+                                               icon: Icon(Icons.location_on_outlined,size: 12,color: Colors.black,),
+                                             //need to bring address here
+                                               label: Flexible(
+                                                 child: Text(_productProvider.sellerDetails == null ? '' : _productProvider.sellerDetails['address'],
+                                                 maxLines: 1,
+                                                   style: TextStyle(color: Colors.black),
+                                                 ),
                                                ),
-                                             ),
+                                           ),
                                          ),
                                        ),
                                      ),
-                                   ),
-                                   Container(
-                                     child: Column(
-                                       crossAxisAlignment: CrossAxisAlignment.start,
-                                       children: [
-                                         Text('POSTED DATE',style: TextStyle(fontSize: 12),),
-                                         //need to convert to date
-                                         Text(_date,style: TextStyle(fontSize: 12),),
-                                       ],
-                                     ),
-                                   )
-                                 ],
+                                     Container(
+                                       child: Column(
+                                         crossAxisAlignment: CrossAxisAlignment.start,
+                                         children: [
+                                           Text('POSTED DATE',style: TextStyle(fontSize: 12),),
+                                           //need to convert to date
+                                           Text(_date,style: TextStyle(fontSize: 12),),
+                                         ],
+                                       ),
+                                     )
+                                   ],
+                                 ),
                                ),
-                             ),
-                           ],
-                         ),
-                       ),
-                     ),
-                   SizedBox(height: 10,),
-                   Text('Description',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
-                   SizedBox(height: 10,),
-                   Row(
-                     children: [
-                       Expanded(
-                         child: Container(
-                           color: Colors.grey.shade300,
-                           child: Padding(
-                             padding: const EdgeInsets.all(10.0),
-                             child: Column(
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 //only  for mobile
-                                 if(data['subCat'] == null || data['subCat'] == 'Mobiles Android')
-                                   Text('Brand: ${data['brand']}'),
-                                 if(data['subCat'] == 'Accessories' ||
-                                     data['subCat'] == 'Tablets' ||
-                                     data['subCat'] == 'sell : House & Apartments' ||
-                                     data['subCat'] == 'Rent :House & Apartments')
-                                   Text('Type: ${data['type ']}'),
-                               ],
-                             ),
+                             ],
                            ),
                          ),
                        ),
-                     ],
-                   ),
+                     SizedBox(height: 10,),
+                     Text('Description',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                     SizedBox(height: 10,),
+                     Row(
+                       children: [
+                         Expanded(
+                           child: Container(
+                             color: Colors.grey.shade300,
+                             child: Padding(
+                               padding: const EdgeInsets.all(10.0),
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: [
+                                   Text(data['description']),
+                                   SizedBox(height: 10,),
+                                   //only  for mobile
+                                   if(data['subCat'] == null || data['subCat'] == 'Mobiles Android')
+                                     Text('Brand: ${data['brand']}'),
+                                   if(data['subCat'] == 'Accessories' ||
+                                       data['subCat'] == 'Tablets'  ||
+                                       data['subCat'] == 'sell : House & Apartments' ||
+                                       data['subCat'] == 'Rent :House & Apartments' )
+                                     Text('Type: ${data['type']}'),
+                                   if( data['subCat'] == 'sell : House & Apartments' ||
+                                       data['subCat'] == 'Rent :House & Apartments' )
+                                     Column(
+                                       crossAxisAlignment: CrossAxisAlignment.start ,
+                                       children: [
+                                         Text('Bedrooms: ${data['bedrooms']}'),
+                                         Text('Bathrooms: ${data['bathrooms']}'),
+                                         Text('Furnishing: ${data['furnishing']}'),
+                                         Text('Construction Status: ${data['ConstructionStatus']}'),
+                                         Text('Total Floors: ${data['totalFloors']}'),
+                                       ],
+                                     ),
+                                 ],
+                               ),
+                             ),
+                           ),
+                         ),
+                       ],
+                     ),
+                     Divider(color: Colors.grey,),
+                     Row(
+                       children: [
+                         CircleAvatar(
+                           backgroundColor: Theme.of(context).primaryColor,
+                           radius: 40,
+                           child: CircleAvatar(
+                             backgroundColor: Colors.blue.shade50,
+                             radius: 38,
+                             child: Icon(
+                               CupertinoIcons.person_alt,
+                               color: Colors.black,
+                               size: 60,
+                             ),
+                           ),
+                         ),
+                         SizedBox(
+                           width: 15,
+                         ),
+                        Expanded(
+                          child: ListTile(
+                            title: Text(_productProvider.sellerDetails == null ? '' : _productProvider.sellerDetails['name'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                            subtitle: Text('SEE PROFILE',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.blue),),
+                            trailing: IconButton(icon: Icon(Icons.arrow_forward_ios,size: 12,), onPressed: (){}),
+                        )
+                        )
+                       ],
+                     ),
+                     Divider(color: Colors.grey,),
+                     Text('Add Posted at',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                     SizedBox(height: 10,),
+                     Container(
+                       height: 200,
+                       color: Colors.grey.shade300,
+                       //google map here
+                       child: Center(child: Text('Seller Location',)),
+                     ),
+                     SizedBox(height: 10,),
+                     Row(
+                       children: [
+                         Expanded(child: Text('AD ID : ${data['postedAt']}',style: TextStyle(fontWeight: FontWeight.bold ,fontSize: 16),)),
+                         TextButton(
+                           onPressed: (){},
+                           child: Text('REPORT THIS AD',style: TextStyle(color: Colors.blue),
 
-                 ],
+                           ),
+                         ),
+
+                       ],
+                     ),
+                     SizedBox(height: 80,),
+                   ],
+                 ),
                ),
-             ),
+
+              ],
+            ),
+          ),
+        ),
+      ),
+      bottomSheet: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Expanded(child: NeumorphicButton(
+                onPressed: (){},
+                style: NeumorphicStyle(
+                  color: Theme.of(context).primaryColor
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(CupertinoIcons.chat_bubble,size: 16 ,color: Colors.white,),
+                      SizedBox(width: 10,),
+                      Text('Chat',style: TextStyle(color: Colors.white))
+                    ],
+                  ),
+                ),
+              ),),
+              SizedBox(width: 20,),
+              Expanded(child: NeumorphicButton(
+                onPressed: (){},
+                style: NeumorphicStyle(
+                  color: Theme.of(context).primaryColor
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(CupertinoIcons.phone,size: 16 ,color: Colors.white,),
+                      SizedBox(width: 10,),
+                      Text('Call',style: TextStyle(color: Colors.white))
+                    ],
+                  ),
+                ),
+              ),),
 
             ],
           ),
