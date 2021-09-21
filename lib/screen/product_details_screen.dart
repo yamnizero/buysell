@@ -1,13 +1,17 @@
 import 'dart:async';
 
 import 'package:buysell/provider/product_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:like_button/like_button.dart';
+import 'package:map_launcher/map_launcher.dart' as launcher;
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   static const String id = "product-details-screen";
@@ -19,6 +23,7 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  GoogleMapController _controller;
   bool _loading = true;
 
   int _index = 0;
@@ -35,6 +40,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     super.initState();
   }
 
+  _mapLauncher(location)async{
+    final availableMaps = await launcher.MapLauncher.installedMaps;
+
+    await availableMaps.first.showMarker(
+      coords: launcher.Coords(location.latitude,location.longitude),
+      title: "Seller Location is here",
+    );
+  }
+
+  _callSeller(number){
+    launch(number);
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -47,6 +65,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
     var date = DateTime.fromMicrosecondsSinceEpoch(data['postedAt']);
     var _date =DateFormat.yMMMd().format(date);
+
+    GeoPoint _location =_productProvider.sellerDetails['location'];
 
     return Scaffold(
       appBar: AppBar(
@@ -149,6 +169,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ],
                         ),
                 ),
+              SizedBox(height: 10,),
               _loading
                   ? Container()
                    :Container(
@@ -157,7 +178,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                    children: [
                      Row(
                        children: [
-                         Text(data['title'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold),),
+                         Text(data['title'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold,
+                         fontSize: 20,
+                         ),),
                          if(data['category']=='Cars')
                            Text('(${(data['year'])})'),
                        ],
@@ -331,7 +354,41 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                        height: 200,
                        color: Colors.grey.shade300,
                        //google map here
-                       child: Center(child: Text('Seller Location',)),
+                       child: Stack(
+                         children: [
+                           Center(
+                               child: GoogleMap(
+                                 initialCameraPosition: CameraPosition(
+                                   target: LatLng(_location.latitude,_location.longitude),
+                                   zoom: 15,
+                                 ),
+                                 mapType: MapType.normal,
+                                 onMapCreated:(GoogleMapController controller){
+                                   setState(() {
+                                     _controller = controller;
+                                   });
+                                 },
+
+                               ),
+                           ),
+                           Center(child: Icon(Icons.location_on,size: 35,)),
+                           Center(child: CircleAvatar(radius: 60 ,backgroundColor: Colors.black12,),),
+                           Positioned(
+                             right: 4.0,
+                           top: 4.0,
+                           child: Material(
+                             elevation: 4,
+                             shape: Border.all(color: Colors.grey.shade300),
+                             child: IconButton(icon: Icon(Icons.alt_route_outlined),
+                             onPressed: (){
+                               //launch location in google map
+                               _mapLauncher(_location);
+                             },
+                             ),
+                           ),
+                           )
+                         ],
+                       ),
                      ),
                      SizedBox(height: 10,),
                      Row(
@@ -381,7 +438,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),),
               SizedBox(width: 20,),
               Expanded(child: NeumorphicButton(
-                onPressed: (){},
+                onPressed: (){
+                  //call seller
+                  _callSeller('tel:?${_productProvider.sellerDetails['mobile']}');
+
+                },
                 style: NeumorphicStyle(
                   color: Theme.of(context).primaryColor
                 ),
