@@ -1,13 +1,22 @@
+import 'package:buysell/provider/cat_provider.dart';
 import 'package:buysell/screen/categories/category_list.dart';
+import 'package:buysell/screen/categories/subCategories_screen.dart';
+import 'package:buysell/screen/sellItems/product_by_category_screen.dart';
+import 'package:buysell/screen/sellItems/seller_subCat.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CategoryWidget extends StatelessWidget {
-  FirebaseServices _services = FirebaseServices();
+
 
   @override
   Widget build(BuildContext context) {
+    FirebaseServices _services = FirebaseServices();
+    var _catProvider = Provider.of<CategoryProvider>(context);
+
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -61,21 +70,34 @@ class CategoryWidget extends StatelessWidget {
 
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: 60,
-                            height: 50,
-                            child: Column(
-                              children: [
-                                Image.network(doc['image']),
-                                Flexible(
-                                  child: Text(
-                                    doc['catName'].toUpperCase(),
-                                    maxLines: 2,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 10),
+                          child: InkWell(
+                            onTap: (){
+                              _catProvider.getCategory(doc['catName']);
+                              _catProvider.getCatSnapshot(doc);
+                              if (doc['subCat'] == null) {
+                                _catProvider.getSubCategory(null);
+                                //here now  need  to sue provider
+                                return Navigator.pushNamed(context, ProductByCategory.id);
+                              }
+                              Navigator.pushNamed(context, SubCategoriesList.id,
+                                  arguments: doc);
+                            },
+                            child: Container(
+                              width: 60,
+                              height: 50,
+                              child: Column(
+                                children: [
+                                  Image.network(doc['image']),
+                                  Flexible(
+                                    child: Text(
+                                      doc['catName'].toUpperCase(),
+                                      maxLines: 2,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 10),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );

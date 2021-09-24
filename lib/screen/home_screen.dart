@@ -1,9 +1,11 @@
 import 'package:buysell/Widgets/banner_widget.dart';
 import 'package:buysell/Widgets/category_widget.dart';
 import 'package:buysell/Widgets/custom_appBar.dart';
+import 'package:buysell/provider/cat_provider.dart';
 import 'package:buysell/screen/product_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = "home-screen";
@@ -14,9 +16,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String address = "sudan";
-
   @override
   Widget build(BuildContext context) {
+
+    var _catProvider = Provider.of<CategoryProvider>(context);
+    _catProvider.clearSelectedCat();
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: PreferredSize(
@@ -44,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 10,),
             //product list
-            ProductList(),
+            ProductList(false),
           ],
         ),
       ),

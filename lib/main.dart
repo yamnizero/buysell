@@ -6,6 +6,7 @@ import 'package:buysell/screen/categories/subCategories_screen.dart';
 import 'package:buysell/screen/home_screen.dart';
 import 'package:buysell/screen/location_screen.dart';
 import 'package:buysell/screen/login_screen.dart';
+import 'package:buysell/screen/sellItems/product_by_category_screen.dart';
 import 'package:buysell/screen/sellItems/seller_category_list.dart';
 import 'package:buysell/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
         UserReviewScreen.id: (context) => UserReviewScreen(),
         FormsScreen.id: (context) => FormsScreen(),
         ProductDetailsScreen.id: (context) => ProductDetailsScreen(),
+        ProductByCategory.id: (context) => ProductByCategory(),
       },
     );
 

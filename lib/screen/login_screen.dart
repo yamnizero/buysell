@@ -1,5 +1,4 @@
 import 'package:buysell/Widgets/auth_ui.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {

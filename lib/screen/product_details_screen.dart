@@ -121,7 +121,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               SizedBox(
                                 height: 10,
                               ),
-                              Text('Loading your Ad')
+                              Text('Loading your Ad'),
                             ],
                           ),
                         )
@@ -440,7 +440,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               Expanded(child: NeumorphicButton(
                 onPressed: (){
                   //call seller
-                  _callSeller('tel:?${_productProvider.sellerDetails['mobile']}');
+                  _callSeller('tel:${_productProvider.sellerDetails['mobile']}');
 
                 },
                 style: NeumorphicStyle(

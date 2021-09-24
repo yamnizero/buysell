@@ -53,4 +53,14 @@ class CategoryProvider with ChangeNotifier {
     dataToFirebasestore = {};
     notifyListeners();
   }
+
+
+  clearSelectedCat(){
+    this.selectedCategory=null;
+    this.selectedSubCat=null;
+    notifyListeners();
+  }
+
+
+
 }

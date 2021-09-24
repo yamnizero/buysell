@@ -1,7 +1,10 @@
+import 'package:buysell/provider/cat_provider.dart';
 import 'package:buysell/screen/categories/subCategories_screen.dart';
+import 'package:buysell/screen/sellItems/product_by_category_screen.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CategoryListScreen extends StatelessWidget {
   static const String id = "category-list-screen";
@@ -12,6 +15,7 @@ class CategoryListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     FirebaseServices _services = FirebaseServices();
+    var _catProvider = Provider.of<CategoryProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -49,11 +53,15 @@ class CategoryListScreen extends StatelessWidget {
                     child: ListTile(
                       onTap: ()
                       {
-                        //subCategories
-                        if(doc['subCat']==null){
-                          return print("No Sub Categories");
+                        _catProvider.getCategory(doc['catName']);
+                        _catProvider.getCatSnapshot(doc);
+                        if (doc['subCat'] == null) {
+                          _catProvider.getSubCategory(null);
+                          //here now  need  to sue provider
+                          return Navigator.pushNamed(context, ProductByCategory.id);
                         }
-                        Navigator.pushNamed(context, SubCategoriesList.id,arguments: doc);
+                        Navigator.pushNamed(context, SubCategoriesList.id,
+                            arguments: doc);
                       },
                       leading: Image.network(doc['image'],width: 40,),
                       title: Text(doc['catName'],style: TextStyle(fontSize: 15),),

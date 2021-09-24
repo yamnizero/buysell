@@ -1,6 +1,10 @@
+
+import 'package:buysell/provider/cat_provider.dart';
+import 'package:buysell/screen/sellItems/product_by_category_screen.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SubCategoriesList extends StatelessWidget {
 
@@ -11,6 +15,7 @@ class SubCategoriesList extends StatelessWidget {
 
     FirebaseServices _services = FirebaseServices();
     DocumentSnapshot args = ModalRoute.of(context).settings.arguments;
+    var _catProvider = Provider.of<CategoryProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -48,6 +53,9 @@ class SubCategoriesList extends StatelessWidget {
                     child: ListTile(
                       onTap: ()
                       {
+                        _catProvider.getSubCategory(data[index]);
+                        Navigator.pushNamed(context, ProductByCategory.id);
+
                       },
                       title: Text(data[index],style: TextStyle(fontSize: 15),),
 
