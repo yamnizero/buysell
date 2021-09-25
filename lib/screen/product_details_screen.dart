@@ -57,6 +57,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
 
     var _productProvider = Provider.of<ProductProvider>(context);
+    GeoPoint _location =_productProvider.sellerDetails['location'];
+
 
     var data = _productProvider.productData;
     var _price = int.parse(data['price']);
@@ -66,7 +68,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     var date = DateTime.fromMicrosecondsSinceEpoch(data['postedAt']);
     var _date =DateFormat.yMMMd().format(date);
 
-    GeoPoint _location =_productProvider.sellerDetails['location'];
 
     return Scaffold(
       appBar: AppBar(
@@ -312,6 +313,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                          Text('Total Floors: ${data['totalFloors']}'),
                                        ],
                                      ),
+                                   SizedBox(height: 20,),
+                                   Text('Posted at: $_date'),
                                  ],
                                ),
                              ),
