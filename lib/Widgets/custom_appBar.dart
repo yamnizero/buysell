@@ -15,30 +15,26 @@ class CustomAppBar extends StatefulWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   FirebaseServices _services = FirebaseServices();
-  SearchServices _search =SearchServices();
+  SearchServices _search = SearchServices();
   static List<Products> products = [];
-
 
   String address = '';
   DocumentSnapshot sellerDetails;
 
   @override
   void initState() {
-    _services.products.get().then((QuerySnapshot snapshot){
-
+    _services.products.get().then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((doc) {
         setState(() {
-          products.add(
-            Products(
-              document: doc,
-              title: doc['title'],
-              category: doc['category'],
-              description: doc['description'],
-              subCat: doc['subCat'],
-              postedDate: doc['postedAt'],
-              price: doc['price'],
-            )
-          );
+          products.add(Products(
+            document: doc,
+            title: doc['title'],
+            category: doc['category'],
+            description: doc['description'],
+            subCat: doc['subCat'],
+            postedDate: doc['postedAt'],
+            price: doc['price'],
+          ));
           getSellerAddress(doc['sellerUid']);
         });
       });
@@ -46,19 +42,20 @@ class _CustomAppBarState extends State<CustomAppBar> {
     super.initState();
   }
 
-  getSellerAddress(sellerId){
-    _services.getSellerData(sellerId).then((value){
+  getSellerAddress(sellerId) {
+    _services.getSellerData(sellerId).then((value) {
+      if(mounted){
         setState(() {
-          address =value['address'];
-          sellerDetails=value;
+          address = value['address'];
+          sellerDetails = value;
         });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     var _provider = Provider.of<ProductProvider>(context);
-
 
     return FutureBuilder<DocumentSnapshot>(
       future: _services.users.doc(_services.user.uid).get(),
@@ -68,7 +65,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           return Text("Something went wrong");
         }
         //here
-        if (!snapshot.hasData==null && !snapshot.data.exists) {
+        if (!snapshot.hasData == null && !snapshot.data.exists) {
           return Text("Address not selected  ");
         }
         if (snapshot.connectionState == ConnectionState.done) {
@@ -83,19 +80,19 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   .getAddress(latLong.latitude, latLong.longitude)
                   .then((adres) {
                 //this address will show in appbar
-                return appBar(adres, context);
+                return appBar(adres, context, _provider, sellerDetails);
               });
             }
           } else {
-            return appBar(data['address'], context);
+            return appBar(data['address'], context, _provider, sellerDetails);
           }
         }
-        return appBar("Fetching location", context);
+        return appBar("Fetching location", context, _provider, sellerDetails);
       },
     );
   }
 
-  Widget appBar(address, context) {
+  Widget appBar(address, context, _provider, sellerDetails) {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0.0,
@@ -103,10 +100,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
       title: InkWell(
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => LocationScreen(popScreen:HomeScreen.id,),
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => LocationScreen(
+                popScreen: HomeScreen.id,
               ),
+            ),
           );
         },
         child: Container(
@@ -138,12 +137,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ),
         ),
       ),
-      bottom:  PreferredSize(
+      bottom: PreferredSize(
         preferredSize: Size.fromHeight(56),
         child: InkWell(
-          onTap: (){
-
-          },
+          onTap: () {},
           child: Container(
             color: Colors.white,
             child: Padding(
@@ -154,15 +151,20 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     child: SizedBox(
                       height: 40,
                       child: TextField(
-                        onTap: (){
-                          _search.search(context: context,productList: products,address: address,_provider: _provider);
+                        onTap: () {
+                          _search.search(
+                              context: context,
+                              productList: products,
+                              address: address,
+                              provider: _provider,
+                              sellerDetails: sellerDetails);
                         },
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.search),
                             labelText: "Find Cars, Mobiles and many more",
                             labelStyle: TextStyle(fontSize: 12),
                             contentPadding:
-                            EdgeInsets.only(left: 10, right: 10),
+                                EdgeInsets.only(left: 10, right: 10),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(6),
                             )),

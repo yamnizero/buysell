@@ -91,7 +91,7 @@ class ProductList extends StatelessWidget {
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200,
                       crossAxisSpacing: 8,
-                      childAspectRatio: 2 / 2.6,
+                      childAspectRatio: 2 / 3,
                       mainAxisSpacing: 10,
                     ),
                     itemCount: snapshot.data.size,

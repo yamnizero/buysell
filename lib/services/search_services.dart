@@ -1,3 +1,4 @@
+import 'package:buysell/screen/product_details_screen.dart';
 import 'package:buysell/screen/product_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class Products {
 }
 class SearchServices{
 
-  search({context,productList,address,_provider}){
+  search({context,productList,address,provider,sellerDetails}){
     showSearch(
       context: context,
       delegate: SearchPage<Products>(
@@ -40,7 +41,7 @@ class SearchServices{
           product.category,
 
         ],
-        builder: (product) {
+        builder: (product)   {
 
           final _format = NumberFormat('##,##,##0');
           var _price = int.parse(product.price);
@@ -50,8 +51,8 @@ class SearchServices{
 
           return InkWell(
             onTap: (){
-              _provider.getProductDetails(widget.data);
-              _provider.getSellerDetails(sellerDetails);
+              provider.getProductDetails(product.document);
+              provider.getSellerDetails(sellerDetails);
               Navigator.pushNamed(context, ProductDetailsScreen.id);
 
             },
