@@ -65,23 +65,32 @@ class _ProductCardState extends State<ProductCard> {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    height: 120,
-                    child: Center(
-                      child: Image.network(widget.data['images'][0]),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 120,
+                          child: Center(
+                            child: Image.network(widget.data['images'][0]),
+                          ),
+                        ),
+                        SizedBox(height: 10,),
+                        Text(
+                          widget.data['title'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(widget._formattedPrice,style: TextStyle(fontWeight: FontWeight.bold
+                        ),
+                        ),
+                        widget.data['category'] == 'Cars' ? Text('${widget.data['year']} - ${_kmFormatted(widget.data['kmDrive'])} km') : Text(''),
+                        SizedBox(height: 10,),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 10,),
-                  Text(
-                    widget.data['title'],
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(widget._formattedPrice,style: TextStyle(fontWeight: FontWeight.bold),),
-
-                  widget.data['category'] == 'Cars' ? Text('${widget.data['year']} - ${_kmFormatted(widget.data['kmDrive'])} km') : Text(''),
-                  SizedBox(height: 10,),
                   Row(
                     children: [
                       Icon(Icons.location_pin,size: 14,color: Colors.black38,),

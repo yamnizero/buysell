@@ -1,6 +1,7 @@
 import 'dart:async';
-
 import 'package:buysell/provider/product_provider.dart';
+import 'package:buysell/screen/chat/chat_conversation_screen.dart';
+import 'package:buysell/services/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   GoogleMapController _controller;
+  FirebaseServices _services =FirebaseServices();
   bool _loading = true;
 
   int _index = 0;
@@ -52,6 +54,42 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   _callSeller(number){
     launch(number);
   }
+
+   createChatRoom(ProductProvider _provider){
+     //we need some data to store in chat room
+     Map<String,dynamic> product = {
+       'productId' : _provider.productData.id,
+       'productImage': _provider.productData['images'][0],
+       'price':_provider.productData['price'],
+       'title':_provider.productData['title'],
+     };
+     List<String> users=[
+       //seller and buyer
+       //seller
+       _provider.sellerDetails['uid'],
+       //buyer
+       _services.user.uid,
+     ];
+     //I think better we will use both user uid and product
+
+     String chatRoomId = '${_provider.sellerDetails['uid']}.${ _services.user.uid}.${_provider.productData.id}';
+  //now lerts create a total data to save in firebase
+     Map<String,dynamic> chatData={
+        'users' : users,
+       'chatRoomId' :chatRoomId,
+       'product':product,
+       'lastChat': null,
+       'lastChatTime': DateTime.now().microsecondsSinceEpoch,
+     };
+     //now we have all the details to save
+     _services.createChatRoom(
+       chatData: chatData,
+     );
+     //after create chatRoom it should open create chat room
+     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ChatConversation()));
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -419,10 +457,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       bottomSheet: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Row(
+          child:_productProvider.productData['sellerUid'] == _services.user.uid
+              ? Row(
             children: [
-              Expanded(child: NeumorphicButton(
-                onPressed: (){},
+              Expanded(
+                child: NeumorphicButton(
+                onPressed: ()
+                {
+
+                },
                 style: NeumorphicStyle(
                   color: Theme.of(context).primaryColor
                 ),
@@ -432,13 +475,41 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(CupertinoIcons.chat_bubble,size: 16 ,color: Colors.white,),
+                      Icon(Icons.edit,size: 16 ,color: Colors.white,),
                       SizedBox(width: 10,),
-                      Text('Chat',style: TextStyle(color: Colors.white))
+                      Text('Edit Product',style: TextStyle(color: Colors.white))
                     ],
                   ),
                 ),
-              ),),
+              ),
+              ),
+            ],
+          )
+              : Row(
+            children: [
+              Expanded(
+                child: NeumorphicButton(
+                  onPressed: ()
+                  {
+                    createChatRoom(_productProvider);
+                  },
+                  style: NeumorphicStyle(
+                      color: Theme.of(context).primaryColor
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(CupertinoIcons.chat_bubble,size: 16 ,color: Colors.white,),
+                        SizedBox(width: 10,),
+                        Text('Chat',style: TextStyle(color: Colors.white))
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(width: 20,),
               Expanded(child: NeumorphicButton(
                 onPressed: (){
@@ -447,7 +518,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                 },
                 style: NeumorphicStyle(
-                  color: Theme.of(context).primaryColor
+                    color: Theme.of(context).primaryColor
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),

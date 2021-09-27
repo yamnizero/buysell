@@ -10,8 +10,8 @@ class FirebaseServices {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
   CollectionReference categories =
       FirebaseFirestore.instance.collection('categories');
-  CollectionReference products =
-      FirebaseFirestore.instance.collection('products');
+  CollectionReference products = FirebaseFirestore.instance.collection('products');
+  CollectionReference messages = FirebaseFirestore.instance.collection('messages');
 
   Future<void> updateUser(Map<String, dynamic> data, context, screen) {
     return users.doc(user.uid).update(data).then((value) {
@@ -46,4 +46,11 @@ class FirebaseServices {
     DocumentSnapshot doc = await users.doc(id).get();
     return doc;
   }
+
+  createChatRoom({chatData}){
+    messages.doc(chatData['chatRoomId']).set(chatData).catchError((e){
+      print(e.toString());
+    });
+  }
+
 }

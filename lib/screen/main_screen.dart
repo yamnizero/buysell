@@ -5,7 +5,7 @@ import 'package:buysell/screen/sellItems/seller_category_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'chat_screen.dart';
+import 'chat/chat_screen.dart';
 
 class MainScreen extends StatefulWidget {
   static const String id = "main-screen";

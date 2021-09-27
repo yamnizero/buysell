@@ -19,7 +19,7 @@ import 'screen/account_screen.dart';
 import 'screen/authentication/email_auth_screen.dart';
 import 'screen/authentication/email_verification_screen.dart';
 import 'screen/authentication/reset_password_screen.dart';
-import 'screen/chat_screen.dart';
+import 'screen/chat/chat_screen.dart';
 import 'screen/main_screen.dart';
 import 'screen/myAd_screen.dart';
 import 'screen/product_details_screen.dart';
