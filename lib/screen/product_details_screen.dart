@@ -86,7 +86,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
        chatData: chatData,
      );
      //after create chatRoom it should open create chat room
-     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ChatConversation()));
+     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ChatConversation(
+       chatRoomId: chatRoomId,
+     ),),);
   }
 
 
