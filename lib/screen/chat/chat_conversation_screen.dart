@@ -21,8 +21,9 @@ var chatMessageController = TextEditingController();
 
  bool _send =false;
 
-sendMessage(){
+  sendMessage(){
   if(chatMessageController.text.isNotEmpty){
+    FocusScope.of(context).unfocus();
     Map<String,dynamic> message ={
       'messages':chatMessageController.text,
       'sentBy': _services.user.uid,
@@ -46,10 +47,7 @@ sendMessage(){
               icon: Icon(Icons.call),
               onPressed: (){}
               ),
-          IconButton(
-              icon: Icon(Icons.more_vert_sharp),
-              onPressed: (){}
-              ),
+          _services.popUpMenu(widget.chatRoomId, context)
         ],
         shape: Border(bottom: BorderSide(color: Colors.grey)),
       ),

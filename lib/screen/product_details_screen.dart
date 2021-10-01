@@ -77,6 +77,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
      Map<String,dynamic> chatData={
         'users' : users,
        'chatRoomId' :chatRoomId,
+       'read':false,
        'product':product,
        'lastChat': null,
        'lastChatTime': DateTime.now().microsecondsSinceEpoch,

@@ -45,82 +45,101 @@ class _ChatStreamState extends State<ChatStream> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: chatMessageStream,
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return Text('Something went wrong');
-        }
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 60),
+      child: StreamBuilder<QuerySnapshot>(
+        stream: chatMessageStream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+            ),);
+          }
 
-        return snapshot.hasData
-            ? Column(
-                children: [
-                  if (chatDoc != null)
-                    ListTile(
-                      title: Text(chatDoc['product']['title']),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('\$${_priceFormatted(
-                            chatDoc['product']['price'],
-                          )}'),
-                          SizedBox(
-                            width: 100,
-                          ),
-                        ],
+          return snapshot.hasData
+              ? Column(
+                  children: [
+                    if (chatDoc != null)
+                      ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                              width: 60,
+                              height: 60,
+                              child: Image.network(chatDoc['product']['productImage'])),
+                        ),
+                        title: Text(chatDoc['product']['title']),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text('\$${_priceFormatted(
+                              chatDoc['product']['price'],
+                            )}'),
+                            SizedBox(
+                              width: 100,
+                            ),
+                          ],
+                        ),
+                      ),
+                    Expanded(
+                      child: Container(
+                        color: Colors.grey.shade300,
+                        child: ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (context, index) {
+                              String sentBy = snapshot.data.docs[index]['sentBy'];
+                              String me = _services.user.uid;
+                              //add chat time
+                              String lastChatDate;
+                              var _date=DateFormat.yMMMd().format(DateTime.fromMicrosecondsSinceEpoch(snapshot.data.docs[index]['time']));
+                              var _today=DateFormat.yMMMd().format(DateTime.fromMicrosecondsSinceEpoch(DateTime.now().microsecondsSinceEpoch));
+
+                              if(_date==_today){
+                                lastChatDate = DateFormat('hh:mm').format(DateTime.fromMicrosecondsSinceEpoch(snapshot.data.docs[index]['time']));
+                              }else{
+                                lastChatDate =_date.toString();
+                              }
+
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+
+                                  children: [
+                                    ChatBubble(
+                                      alignment: sentBy==me? Alignment.centerRight :Alignment.centerLeft,
+                                      backGroundColor: sentBy == me
+                                          ? Theme.of(context).primaryColor
+                                          : Colors.grey,
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                          maxWidth: MediaQuery.of(context).size.width * .8 ,
+                                        ),
+                                        child: Text(
+                                          snapshot.data.docs[index]['message'],
+                                          style: TextStyle(color: sentBy==me?Colors.white:Colors.black),
+                                        ),
+                                      ),
+                                      clipper: ChatBubbleClipper2(
+                                          type:sentBy==me? BubbleType.sendBubble : BubbleType.receiverBubble),
+                                    ),
+                                    Align(
+                                        alignment: sentBy==me? Alignment.centerRight :Alignment.centerLeft,
+                                        child: Text(lastChatDate,style: TextStyle(fontSize: 12),)),
+                                  ],
+                                ),
+                              );
+                            }),
                       ),
                     ),
-                  Expanded(
-                    child: Container(
-                      color: Colors.grey.shade300,
-                      child: ListView.builder(
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (context, index) {
-                            String sentBy = snapshot.data.docs[index]['sentBy'];
-                            String me = _services.user.uid;
-                            //add chat time
-                            String lastChatDate;
-                            var _date=DateFormat.yMMMd().format(DateTime.fromMicrosecondsSinceEpoch(snapshot.data.docs[index]['time']));
-                            var _today=DateFormat.yMMMd().format(DateTime.fromMicrosecondsSinceEpoch(DateTime.now().microsecondsSinceEpoch));
-
-                            if(_date==_today){
-                              lastChatDate = DateFormat('hh:mm').format(DateTime.fromMicrosecondsSinceEpoch(snapshot.data.docs[index]['time']));
-                            }else{
-                              lastChatDate =_date.toString();
-                            }
-
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  ChatBubble(
-                                    backGroundColor: sentBy == me
-                                        ? Theme.of(context).primaryColor
-                                        : Colors.grey,
-                                    child: Text(
-                                      snapshot.data.docs[index]['message'],
-                                      style: TextStyle(color: sentBy==me?Colors.white:Colors.black),
-                                    ),
-                                    clipper: ChatBubbleClipper2(
-                                        type: BubbleType.sendBubble),
-                                  ),
-                                  Align(
-                                      alignment: sentBy==me? Alignment.centerRight :Alignment.centerLeft,
-                                      child: Text(lastChatDate)),
-                                ],
-                              ),
-                            );
-                          }),
-                    ),
-                  ),
-                ],
-              )
-            : Container();
-      },
+                  ],
+                )
+              : Container();
+        },
+      ),
     );
   }
 }
