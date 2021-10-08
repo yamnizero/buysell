@@ -97,7 +97,6 @@ class _ChatStreamState extends State<ChatStream> {
                               String lastChatDate;
                               var _date=DateFormat.yMMMd().format(DateTime.fromMicrosecondsSinceEpoch(snapshot.data.docs[index]['time']));
                               var _today=DateFormat.yMMMd().format(DateTime.fromMicrosecondsSinceEpoch(DateTime.now().microsecondsSinceEpoch));
-
                               if(_date==_today){
                                 lastChatDate = DateFormat('hh:mm').format(DateTime.fromMicrosecondsSinceEpoch(snapshot.data.docs[index]['time']));
                               }else{

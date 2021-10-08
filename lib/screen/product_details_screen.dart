@@ -31,6 +31,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _index = 0;
 
   final _format =NumberFormat('##,##,##0');
+  List fav =[];
+  bool _isLike =false;
 
   @override
   void initState() {
@@ -62,6 +64,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
        'productImage': _provider.productData['images'][0],
        'price':_provider.productData['price'],
        'title':_provider.productData['title'],
+       'seller' : _provider.productData['sellerUid']
      };
      List<String> users=[
        //seller and buyer
@@ -90,6 +93,31 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ChatConversation(
        chatRoomId: chatRoomId,
      ),),);
+  }
+
+  @override
+  void didChangeDependencies() {
+    var _productProvider = Provider.of<ProductProvider>(context);
+
+    getFavourites(_productProvider);
+    super.didChangeDependencies();
+  }
+
+  getFavourites(ProductProvider _productProvider){
+    _services.products.doc(_productProvider.productData.id).get().then((value){
+      setState(() {
+        fav=value['favourites'];
+      });
+      if(fav.contains(_services.user.uid)){
+        setState(() {
+          _isLike = true;
+        });
+      }else{
+        setState(() {
+          _isLike = false;
+        });
+      }
+    });
   }
 
 
@@ -123,18 +151,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
             onPressed: () {},
           ),
-          LikeButton(
-            circleColor:
-                CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
-            bubblesColor: BubblesColor(
-              dotPrimaryColor: Color(0xff33b5e5),
-              dotSecondaryColor: Color(0xff0099cc),
-            ),
-            likeBuilder: (bool isLiked) {
-              return Icon(
-                Icons.favorite,
-                color: isLiked ? Colors.red : Colors.grey,
-              );
+          IconButton(
+            icon: Icon(_isLike ?Icons.favorite :Icons.favorite_border),
+            color: _isLike ? Colors.red : Colors.black,
+            onPressed: (){
+              setState(() {
+                _isLike = !_isLike;
+              });
+              _services.updateFavourite(_isLike,data.id, context);
             },
           ),
         ],

@@ -1,4 +1,6 @@
 import 'package:buysell/Widgets/product_card.dart';
+import 'package:buysell/screen/main_screen.dart';
+import 'package:buysell/screen/sellItems/seller_category_list.dart';
 import 'package:buysell/services/firebase_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +72,25 @@ class MyAdsScreen extends StatelessWidget {
                       );
                     }
 
+
+                    if(snapshot.data.docs.length==0){
+                      return Center(child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('No Ads given yet',style: TextStyle(fontWeight: FontWeight.bold),),
+                          SizedBox(height: 10,),
+                          ElevatedButton(
+                            child: Text('Buy Product'),
+                            onPressed: (){
+                              Navigator.pushNamed(context, SellerCategory.id);
+
+                            },
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor),),
+                          )
+                        ],
+                      ),);
+                    }
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -107,7 +128,83 @@ class MyAdsScreen extends StatelessWidget {
                 ),
               ),
             ),
-             Center(child: Text('my favourites'),)
+            Container(
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _services.products.where('favourites',arrayContains: _services.user.uid).snapshots(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Something went wrong');
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 140, right: 140),
+                        child: Center(
+                          child: LinearProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).primaryColor),
+                            backgroundColor: Colors.grey.shade100,
+                          ),
+                        ),
+                      );
+                    }
+                    if(snapshot.data.docs.length==0){
+                      return Center(child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('No Favourites yet',style: TextStyle(fontWeight: FontWeight.bold),),
+                          SizedBox(height: 10,),
+                          ElevatedButton(
+                            child: Text('Ad Favourites'),
+                            onPressed: (){
+                              Navigator.pushNamed(context, MainScreen.id);
+                            },
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor),),
+                          )
+                        ],
+                      ),);
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            height: 56,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'My Ads',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),),
+                        Expanded(
+                          child: GridView.builder(
+                              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 200,
+                                crossAxisSpacing: 8,
+                                childAspectRatio: 2 / 3,
+                                mainAxisSpacing: 10,
+                              ),
+                              itemCount: snapshot.data.size,
+                              itemBuilder: (BuildContext context, int i) {
+                                var data = snapshot.data.docs[i];
+                                //convert to int because in firestore it is in string
+                                var _price = int.parse(data['price']);
+                                String _formattedPrice = '\$ ${_format.format(_price)}';
+                                return ProductCard(data: data, formattedPrice: _formattedPrice);
+                              }),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+
           ],
         ),
       ),

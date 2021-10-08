@@ -114,7 +114,8 @@ class _FormsScreenState extends State<FormsScreen> {
             'description': _descController.text,
             'sellerUid': _services.user.uid,
             'images': provider.urlListImg,
-            'postedAt' : DateTime.now().microsecondsSinceEpoch
+            'postedAt' : DateTime.now().microsecondsSinceEpoch,
+            'favourites':[]
           });
           //once saved all data to provider , we need to check user contact details again
           //to confirm all the details  are  there,so we need to go profile screen
